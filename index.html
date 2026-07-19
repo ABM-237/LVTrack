@@ -484,6 +484,8 @@ button:disabled{opacity:.5;cursor:not-allowed;}
     </button>
     <div id="sync_status" style="font-size:.62rem;color:var(--mu)"></div>
     <button type="button" class="btn sec" style="padding:4px 10px;font-size:.63rem;border-color:rgba(46,204,138,.4);color:var(--gr)" onclick="forcerSync()" title="Forcer la synchronisation avec la base de données">🔄 Sync</button>
+    <button type="button" id="btn_security" class="btn sec" style="padding:4px 10px;font-size:.63rem;border-color:rgba(46,204,196,.4);color:var(--te)" onclick="verifierSecuriteSupabase()" title="Vérifier la sécurité Supabase">🔒 Sécurité</button>
+    <button type="button" id="btn_restore" class="btn sec" style="padding:4px 10px;font-size:.63rem;border-color:rgba(169,122,255,.4);color:var(--pu)" onclick="restaurerSnapshot()" title="Restaurer depuis un snapshot automatique">⏪ Restaurer</button>
 
     <!-- [FIX P2-13] div onclick remplacé par button pour accessibilité clavier -->
     <button type="button" id="user_badge" style="display:flex;align-items:center;gap:7px;background:var(--sur2);border:1px solid var(--bor);border-radius:20px;padding:4px 10px 4px 4px;cursor:pointer;font-family:'DM Mono',monospace" onclick="demanderDeconnexion()" aria-label="Se déconnecter">
@@ -1768,6 +1770,161 @@ function forcerSync(){
 }
 // ── FIN MODULE SYNC v2 ──
 
+// ══════════════════════════════════════════════════════════════
+//  [FIX v4.8] MODULE BACKUP AUTOMATIQUE
+//  Sauvegarde JSON automatique toutes les 30 min + rappel quotidien
+// ══════════════════════════════════════════════════════════════
+const BACKUP_INTERVAL = 30 * 60 * 1000; // 30 minutes
+const BACKUP_REMIND_KEY = 'lvt5_last_backup_remind';
+
+function autoBackupCheck(){
+  if(!isAdmin()) return;
+  const lastRemind = localStorage.getItem(BACKUP_REMIND_KEY);
+  const now = Date.now();
+  // Rappel quotidien si pas de sauvegarde manuelle depuis 24h
+  if(!lastRemind || (now - parseInt(lastRemind)) > 24 * 60 * 60 * 1000){
+    setTimeout(()=>{
+      const toast = document.createElement('div');
+      toast.style.cssText = 'position:fixed;bottom:20px;right:20px;background:var(--sur);border:2px solid var(--ac);border-radius:12px;padding:16px 20px;z-index:9999;font-family:"DM Mono",monospace;box-shadow:0 8px 32px rgba(0,0,0,.5);max-width:340px';
+      toast.innerHTML = '<div style="font-size:.78rem;font-weight:700;color:var(--ac);margin-bottom:8px">💾 Sauvegarde recommandée</div>'
+        +'<div style="font-size:.7rem;color:var(--mu);margin-bottom:12px">Pensez à sauvegarder vos données régulièrement pour éviter toute perte.</div>'
+        +'<div style="display:flex;gap:8px">'
+        +'<button class="btn sm" style="background:var(--gr);color:#000" onclick="exportJSON();localStorage.setItem(\''+BACKUP_REMIND_KEY+'\',Date.now());this.closest(\'div[style]\').remove()">💾 Sauvegarder maintenant</button>'
+        +'<button class="btn sm sec" onclick="localStorage.setItem(\''+BACKUP_REMIND_KEY+'\',Date.now());this.closest(\'div[style]\').remove()">Plus tard</button>'
+        +'</div>';
+      document.body.appendChild(toast);
+      setTimeout(()=>{ if(toast.parentNode) toast.remove(); }, 30000);
+    }, 5000);
+  }
+}
+
+// Auto-save local snapshot toutes les 30 min (rotation de 3 snapshots)
+function autoSnapshot(){
+  if(!db.socs.length) return; // Pas de données, pas de snapshot
+  try{
+    const snapshots = JSON.parse(localStorage.getItem('lvt5_snapshots') || '[]');
+    const snap = {
+      ts: new Date().toISOString(),
+      data: JSON.stringify(db)
+    };
+    snapshots.unshift(snap);
+    // Garder max 3 snapshots (pour économiser localStorage)
+    while(snapshots.length > 3) snapshots.pop();
+    localStorage.setItem('lvt5_snapshots', JSON.stringify(snapshots));
+    console.log('[BACKUP] Snapshot auto sauvegardé:', snap.ts);
+  } catch(e){
+    console.warn('[BACKUP] Snapshot échoué:', e.message);
+  }
+}
+
+// Restaurer depuis un snapshot
+function restaurerSnapshot(){
+  try{
+    const snapshots = JSON.parse(localStorage.getItem('lvt5_snapshots') || '[]');
+    if(!snapshots.length){ alert('Aucun snapshot disponible.'); return; }
+    const labels = snapshots.map((s,i) => (i+1)+'. '+new Date(s.ts).toLocaleString('fr-FR'));
+    const choix = prompt('Snapshots disponibles :\n'+labels.join('\n')+'\n\nEntrez le numéro (1-'+snapshots.length+') :');
+    const idx = parseInt(choix) - 1;
+    if(isNaN(idx) || idx < 0 || idx >= snapshots.length){ alert('Choix invalide.'); return; }
+    if(!confirm('Restaurer le snapshot du '+new Date(snapshots[idx].ts).toLocaleString('fr-FR')+' ?\n\nLes données actuelles seront remplacées.')) return;
+    db = JSON.parse(snapshots[idx].data);
+    save(); renderAllFull();
+    alert('✓ Données restaurées depuis le snapshot du '+new Date(snapshots[idx].ts).toLocaleString('fr-FR'));
+  } catch(e){ alert('Erreur : '+e.message); }
+}
+
+setInterval(autoSnapshot, BACKUP_INTERVAL);
+
+// ══════════════════════════════════════════════════════════════
+//  [FIX v4.8] ANTI-PAUSE SUPABASE
+//  Ping automatique toutes les 4h pour éviter la mise en pause
+//  du projet gratuit Supabase après 7 jours d'inactivité
+// ══════════════════════════════════════════════════════════════
+function antiPausePing(){
+  if(!_sb || !navigator.onLine) return;
+  // Simple requête SELECT 1 pour garder le projet actif
+  _sb.from('socs').select('id').limit(1)
+    .then(({error}) => {
+      if(error) console.warn('[PING] Anti-pause erreur:', error.message);
+      else console.log('[PING] Anti-pause OK:', new Date().toISOString());
+    })
+    .catch(e => console.warn('[PING]', e.message));
+}
+// Ping toutes les 4 heures
+setInterval(antiPausePing, 4 * 60 * 60 * 1000);
+
+// ══════════════════════════════════════════════════════════════
+//  [FIX v4.8] VÉRIFICATEUR SÉCURITÉ SUPABASE
+//  Vérifie RLS, tables, et configuration depuis le navigateur
+// ══════════════════════════════════════════════════════════════
+async function verifierSecuriteSupabase(){
+  if(!_sb){ alert('Supabase non connecté.'); return; }
+  const results = [];
+  
+  // Test 1 : Connexion
+  try{
+    const {data,error} = await _sb.from('socs').select('id').limit(1);
+    if(error) results.push('❌ Connexion DB : '+error.message);
+    else results.push('✅ Connexion DB : OK');
+  } catch(e){ results.push('❌ Connexion DB : '+e.message); }
+
+  // Test 2 : Auth
+  try{
+    const {data} = await _sb.auth.getSession();
+    results.push(data?.session ? '✅ Auth : Session active' : '⚠️ Auth : Pas de session');
+  } catch(e){ results.push('❌ Auth : '+e.message); }
+
+  // Test 3 : Vérifier chaque table
+  const tables = ['socs','titres_f','quits','lots','timbres','encs','decs','utilisations','profiles','prets','rmbs'];
+  for(const t of tables){
+    try{
+      const {data,error} = await _sb.from(t).select('id').limit(1);
+      if(error){
+        if(error.message.includes('does not exist') || error.code === '42P01')
+          results.push('⚠️ Table "'+t+'" : N\'EXISTE PAS — à créer dans Supabase');
+        else if(error.message.includes('permission denied'))
+          results.push('✅ Table "'+t+'" : RLS ACTIF (protégée)');
+        else
+          results.push('⚠️ Table "'+t+'" : '+error.message);
+      } else {
+        results.push('✅ Table "'+t+'" : OK ('+(data?data.length:0)+' résultat)');
+      }
+    } catch(e){ results.push('❌ Table "'+t+'" : '+e.message); }
+  }
+
+  // Test 4 : Taille approximative
+  try{
+    let totalRows = 0;
+    for(const col of Object.keys(TMAP)){
+      totalRows += (db[col]||[]).length;
+    }
+    results.push('📊 Données locales : ~'+totalRows+' enregistrements');
+    const sizeKo = Math.round(JSON.stringify(db).length / 1024);
+    results.push('📊 Taille localStorage : ~'+sizeKo+' Ko / 5 120 Ko max');
+    if(sizeKo > 4000) results.push('⚠️ localStorage presque plein ! Supprimez les anciennes PJ.');
+  } catch(e){}
+
+  // Afficher les résultats
+  const modal = document.createElement('div');
+  modal.className = 'modal-bg open';
+  modal.innerHTML = '<div class="modal" style="max-width:600px">'
+    +'<h3 style="color:var(--te)">🔒 Diagnostic sécurité Supabase</h3>'
+    +'<div style="font-size:.72rem;line-height:2.2;background:var(--bg);border:1px solid var(--bor);border-radius:8px;padding:14px;max-height:60vh;overflow-y:auto">'
+    +results.join('<br>')
+    +'</div>'
+    +'<div style="margin-top:12px;font-size:.65rem;color:var(--mu)">'
+    +'<strong>Recommandations :</strong><br>'
+    +'• Les tables marquées "N\'EXISTE PAS" doivent être créées dans votre dashboard Supabase<br>'
+    +'• "RLS ACTIF" = la table est protégée (bon)<br>'
+    +'• Vérifiez manuellement dans Supabase Dashboard → Authentication → Policies que chaque table a des règles RLS'
+    +'</div>'
+    +'<div class="modal-foot">'
+    +'<button class="btn sec" onclick="this.closest(\'.modal-bg\').remove()">Fermer</button>'
+    +'<button class="btn" style="background:var(--te);color:#000" onclick="navigator.clipboard.writeText(\''+results.join('\\n').replace(/'/g,"\\'")+'\');alert(\'Copié !\')">📋 Copier</button>'
+    +'</div></div>';
+  document.body.appendChild(modal);
+}
+
 function confirmerReset(){ resetComptes(); }
 
 function fmt(n){return Number(n||0).toLocaleString('fr-FR')+' F';}
@@ -2183,6 +2340,8 @@ function ouvrirApp(user){
   appliquerPermissions(perms);
   renderAll();
   if(typeof initSyncStatus==='function') initSyncStatus();
+  /* [FIX v4.8] Backup automatique : rappel + premier snapshot */
+  setTimeout(()=>{ autoBackupCheck(); autoSnapshot(); }, 3000);
 }
 
 function appliquerPermissions(perms){
@@ -2207,7 +2366,7 @@ function appliquerPermissions(perms){
     else if(r==='read') btn.classList.add('readonly-nav');
   });
 
-  ['btn_reset','btn_archive','sync_status'].forEach(function(id){
+  ['btn_reset','btn_archive','sync_status','btn_security','btn_restore'].forEach(function(id){
     const el=document.getElementById(id);
     if(el) el.style.display=admin?'':'none';
   });
