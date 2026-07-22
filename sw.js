@@ -1,11 +1,12 @@
-// LVTrack v4.9 — Service Worker (mode hors-ligne)
-const CACHE_NAME = 'lvtrack-v49';
-const ASSETS = ['./', './index.html'];
+// LVTrack — Service Worker v5 (purge + reinstall)
+const CACHE_NAME = 'lvtrack-v50';
 
 self.addEventListener('install', e => {
   e.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(c => c.addAll(ASSETS))
+    caches.keys().then(keys =>
+      Promise.all(keys.map(k => caches.delete(k)))
+    ).then(() => caches.open(CACHE_NAME))
+      .then(c => c.addAll(['./', './index.html']))
       .then(() => self.skipWaiting())
   );
 });
@@ -19,16 +20,15 @@ self.addEventListener('activate', e => {
 });
 
 self.addEventListener('fetch', e => {
-  // Cache-first pour l'app, network-first pour les API
   if (e.request.url.includes('supabase.co') || e.request.url.includes('cdn.')) {
     e.respondWith(fetch(e.request).catch(() => caches.match(e.request)));
   } else {
     e.respondWith(
-      caches.match(e.request).then(r => r || fetch(e.request).then(resp => {
+      fetch(e.request).then(resp => {
         const clone = resp.clone();
         caches.open(CACHE_NAME).then(c => c.put(e.request, clone));
         return resp;
-      }))
+      }).catch(() => caches.match(e.request))
     );
   }
 });
