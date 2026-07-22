@@ -391,6 +391,23 @@ button:disabled{opacity:.5;cursor:not-allowed;}
 /* [FIX MISE EN PAGE] Cartes stock/sociétés : aération */
 .soc-card{transition:border-color .15s;}
 .soc-card:hover{border-color:var(--ac);}
+
+/* ═══ [v4.9] STYLES D'IMPRESSION ═══ */
+@media print {
+  * { color: #000 !important; background: #fff !important; box-shadow: none !important; }
+  nav, header, .modal-bg, #loginPage, button, .skip-link, noscript,
+  #print_no { display: none !important; }
+  .page { display: block !important; }
+  .page:not(.print-target) { display: none !important; }
+  table { border-collapse: collapse; width: 100%; font-size: 9pt; }
+  th, td { border: 1px solid #333; padding: 4px 6px; }
+  th { background: #ddd !important; font-weight: bold; }
+  .tag { border: 1px solid #666; padding: 1px 4px; }
+  @page { margin: 15mm; }
+  #print_header { display: block !important; text-align: center; margin-bottom: 16px; border-bottom: 2px solid #000; padding-bottom: 8px; }
+}
+#print_header { display: none; }
+
 </style>
 <!-- [FIX v4.8] Manifest PWA inline (data URI) — plus besoin de manifest.json externe -->
 <link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22LVTrack%22%2C%22short_name%22%3A%22LVTrack%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%230f1320%22%2C%22theme_color%22%3A%22%23C9962A%22%2C%22description%22%3A%22Gestion%20des%20Documents%20S%C3%A9curis%C3%A9s%20-%20LVG%2FLVD%2FDF10%22%2C%22icons%22%3A%5B%5D%7D">
@@ -399,6 +416,10 @@ button:disabled{opacity:.5;cursor:not-allowed;}
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="LVTrack">
 <meta name="mobile-web-app-capable" content="yes">
+<!-- [v4.9] SheetJS pour export Excel -->
+<script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+<!-- [v4.9] Chart.js pour graphiques interactifs -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
 </head>
 <body>
 
@@ -409,6 +430,7 @@ button:disabled{opacity:.5;cursor:not-allowed;}
   </div>
 </noscript>
 
+<div id="print_header"><h1>LVTrack — Rapport</h1><p id="print_subtitle"></p></div>
 <!-- [A11Y] Skip link pour navigation clavier directe au contenu -->
 <a href="#main-content" class="skip-link">Aller au contenu principal</a>
 
@@ -480,8 +502,9 @@ button:disabled{opacity:.5;cursor:not-allowed;}
     <button type="button" id="btn_archive" class="btn sec" style="padding:4px 10px;font-size:.63rem;border-color:rgba(26,188,156,.5);color:var(--te)"  onclick="ouvrirArchive()" title="Archiver l'année et repartir à zéro">📦 Archive</button>
     <button type="button" id="btn_reset"   class="btn sec" style="padding:4px 10px;font-size:.63rem;border-color:rgba(224,90,90,.3);color:var(--re)"  onclick="confirmerReset()" title="Effacer toutes les données">🗑 Reset</button>
     <button id="btn_import_json" type="button" class="btn sec" style="padding:4px 10px;font-size:.63rem;border-color:rgba(46,204,138,.4);color:var(--gr)" title="Sauvegarder les données (JSON)" onclick="exportJSON()">
-      💾 Sauvegarder
+      💾 JSON
     </button>
+    <button id="btn_export_xl" type="button" class="btn sec" style="padding:4px 10px;font-size:.63rem;border-color:rgba(77,166,255,.4);color:var(--bl)" onclick="exportExcel()" title="Exporter en Excel">📊 Excel</button>
     <div id="sync_status" style="font-size:.62rem;color:var(--mu)"></div>
     <button type="button" class="btn sec" style="padding:4px 10px;font-size:.63rem;border-color:rgba(46,204,138,.4);color:var(--gr)" onclick="forcerSync()" title="Forcer la synchronisation avec la base de données">🔄 Sync</button>
     <button type="button" id="btn_security" class="btn sec" style="padding:4px 10px;font-size:.63rem;border-color:rgba(46,204,196,.4);color:var(--te)" onclick="verifierSecuriteSupabase()" title="Vérifier la sécurité Supabase">🔒 Sécurité</button>
@@ -1336,6 +1359,11 @@ button:disabled{opacity:.5;cursor:not-allowed;}
 
 
 <script>
+// [v4.9] Service Worker registration
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('sw.js').then(r=>console.log('[SW] OK:',r.scope)).catch(e=>console.warn('[SW]',e.message));
+}
+
 const PX=5000, PXT=1000;
 const TI={
   LVG:{col:'var(--ac)',cls:'a',timbre:true},
@@ -1375,7 +1403,7 @@ function save(){
 //   dans le dashboard Supabase → Authentication → Policies. Sans RLS, n'importe
 //   qui avec cette clé peut lire/écrire/supprimer toutes les données.
 const SUPABASE_URL  = 'https://wtpywfdblngmoklysvpf.supabase.co';
-const SUPABASE_ANON = 'sb_publishable_frVn9ubGYZwNQWyYxBlMkw_NI7nWWiG';
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind0cHl3ZmRibG5nbW9rbHlzdnBmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY2OTg1NjAsImV4cCI6MjA5MjI3NDU2MH0.mgeQzsgGvrvzPfUJJshkLckmVwJkrj0HvomApD-0r0Y';
 
 let _sb=null, _syncOn=false, _syncing=false;
 /* [FIX v4.8] _syncQ supprimé : variable orpheline jamais utilisée (la vraie file utilise lvt_queue via getQueue/setQueue) */
@@ -1769,6 +1797,40 @@ function forcerSync(){
   }).catch(e => { syncUI('⚠ ' + e.message, 'var(--or)'); });
 }
 // ── FIN MODULE SYNC v2 ──
+
+// ══════════════════════════════════════════════════════════════
+//  [v4.9] SUPABASE STORAGE — PJ dans le cloud (1 Go gratuit / 100 Go Pro)
+// ══════════════════════════════════════════════════════════════
+const PJ_BUCKET='pj';
+let _pjBucketReady=false;
+
+async function initPJBucket(){
+  if(!_sb||_pjBucketReady)return;
+  try{
+    const{error}=await _sb.storage.from(PJ_BUCKET).list('',{limit:1});
+    if(!error){_pjBucketReady=true;console.log('[STORAGE] Bucket PJ prêt');}
+    else console.warn('[STORAGE] Bucket PJ indisponible:',error.message,'— Créez-le dans Supabase → Storage → New bucket "pj" (public)');
+  }catch(e){console.warn('[STORAGE]',e.message);}
+}
+
+async function uploadPJ(file,prefix){
+  if(!_sb||!_pjBucketReady)return null;
+  try{
+    const ext=file.name.split('.').pop().toLowerCase();
+    const fn=prefix+'_'+Date.now()+'.'+ext;
+    const{data,error}=await _sb.storage.from(PJ_BUCKET).upload(fn,file,{cacheControl:'3600',upsert:false});
+    if(error){console.warn('[STORAGE]',error.message);return null;}
+    const{data:u}=_sb.storage.from(PJ_BUCKET).getPublicUrl(fn);
+    return{nom:file.name,type:ext,taille:file.size,url:u.publicUrl};
+  }catch(e){console.warn('[STORAGE]',e.message);return null;}
+}
+
+function ouvrirPJ(pj){
+  if(!pj)return alert('Aucune pièce jointe.');
+  if(pj.url) window.open(pj.url,'_blank');
+  else if(pj.data){const a=document.createElement('a');a.href=pj.data;a.download=pj.nom;a.click();}
+}
+
 
 // ══════════════════════════════════════════════════════════════
 //  [FIX v4.8] MODULE BACKUP AUTOMATIQUE
@@ -2366,7 +2428,7 @@ function appliquerPermissions(perms){
     else if(r==='read') btn.classList.add('readonly-nav');
   });
 
-  ['btn_reset','btn_archive','sync_status','btn_security','btn_restore'].forEach(function(id){
+  ['btn_reset','btn_archive','sync_status','btn_security','btn_restore','btn_export_xl'].forEach(function(id){
     const el=document.getElementById(id);
     if(el) el.style.display=admin?'':'none';
   });
@@ -3267,34 +3329,37 @@ function ouvrirPJLot(lotId){
   a.href=l.pj.data; a.download=l.pj.nom; a.click();
 }
 
+/* [v4.9] lotPJSelectionner : Supabase Storage d'abord, base64 en fallback */
 function lotPJSelectionner(file){
   if(!file) return;
-  const ext = file.name.split('.').pop().toLowerCase();
-  if(!['pdf','zip'].includes(ext)){
-    mg('msg_l','Format non accepté pour la pièce jointe. Utilisez .pdf ou .zip.','err');
-    return;
+  const ext=file.name.split('.').pop().toLowerCase();
+  if(!['pdf','zip','jpg','jpeg','png','webp'].includes(ext)){
+    mg('msg_l','Format non accepté. Utilisez PDF, ZIP, JPG ou PNG.','err');return;
   }
-  const reader = new FileReader();
-  reader.onload = function(e){
-    /* [FIX v4.8] Vérifier la taille avant stockage base64 (localStorage limité à ~5Mo) */
-    if(file.size > 2 * 1024 * 1024){
-      mg('msg_l','⚠ Fichier trop volumineux ('+((file.size/1024/1024).toFixed(1))+' Mo). Maximum 2 Mo pour les pièces jointes.','err');
-      return;
-    }
-    _lotPJData = { nom: file.name, type: ext, taille: file.size, data: e.target.result };
-    const sz = file.size > 1024*1024
-      ? (file.size/1024/1024).toFixed(1)+' Mo'
-      : (file.size/1024).toFixed(1)+' Ko';
-    const icon = ext==='pdf' ? '📄' : '🗜';
-    document.getElementById('lot_pj_icon').textContent = icon;
-    document.getElementById('lot_pj_name').textContent = file.name;
-    document.getElementById('lot_pj_size').textContent = sz+' · '+ext.toUpperCase();
-    const info = document.getElementById('lot_pj_info');
-    if(info){ info.style.display='flex'; }
-    const zone = document.getElementById('lot_pj_zone');
-    if(zone) zone.style.borderColor='var(--gr)';
-  };
-  reader.readAsDataURL(file);
+  if(file.size > 10*1024*1024){mg('msg_l','⚠ Max 10 Mo.','err');return;}
+  
+  const sz=file.size>1024*1024?(file.size/1024/1024).toFixed(1)+' Mo':(file.size/1024).toFixed(1)+' Ko';
+  const icon=ext==='pdf'?'📄':ext==='zip'?'🗜':'🖼';
+  document.getElementById('lot_pj_icon').textContent=icon;
+  document.getElementById('lot_pj_name').textContent=file.name;
+  document.getElementById('lot_pj_size').textContent=sz+' · '+ext.toUpperCase();
+  const info=document.getElementById('lot_pj_info');if(info)info.style.display='flex';
+  const zone=document.getElementById('lot_pj_zone');if(zone)zone.style.borderColor='var(--gr)';
+  
+  if(_pjBucketReady){
+    mg('msg_l','⬆ Upload en cours...','');
+    uploadPJ(file,'lot').then(r=>{
+      if(r){_lotPJData=r;mg('msg_l','✓ PJ uploadée dans le cloud.','ok');}
+      else _lotPJFallback(file);
+    });
+  } else _lotPJFallback(file);
+}
+function _lotPJFallback(file){
+  if(file.size>2*1024*1024){mg('msg_l','⚠ Mode hors-ligne : max 2 Mo.','err');return;}
+  const reader=new FileReader();
+  reader.onload=function(e){
+    _lotPJData={nom:file.name,type:file.name.split('.').pop().toLowerCase(),taille:file.size,data:e.target.result};
+  };reader.readAsDataURL(file);
 }
 
 function lotPJEffacer(){
@@ -5282,7 +5347,24 @@ function _printTable(title,rows,headers,rowFn){
     tr:nth-child(even)td{background:#f8f8f8;}
     .footer{margin-top:14px;font-size:8px;color:#aaa;border-top:1px solid #ddd;padding-top:6px;}
     @media print{@page{margin:1.5cm;size:A4 landscape;}}`;
-  const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${title}</title><style>${style}</style></head>
+  const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${title}</title><style>${style}
+/* ═══ [v4.9] STYLES D'IMPRESSION ═══ */
+@media print {
+  * { color: #000 !important; background: #fff !important; box-shadow: none !important; }
+  nav, header, .modal-bg, #loginPage, button, .skip-link, noscript,
+  #print_no { display: none !important; }
+  .page { display: block !important; }
+  .page:not(.print-target) { display: none !important; }
+  table { border-collapse: collapse; width: 100%; font-size: 9pt; }
+  th, td { border: 1px solid #333; padding: 4px 6px; }
+  th { background: #ddd !important; font-weight: bold; }
+  .tag { border: 1px solid #666; padding: 1px 4px; }
+  @page { margin: 15mm; }
+  #print_header { display: block !important; text-align: center; margin-bottom: 16px; border-bottom: 2px solid #000; padding-bottom: 8px; }
+}
+#print_header { display: none; }
+
+</style></head>
   <body><h1>LVTrack Pro — ${title}</h1>
   <p>Exporté le ${new Date().toLocaleString('fr-FR')} · ${rows.length} enregistrement(s)</p>
   <table><thead><tr>${headers.map(h=>`<th>${h}</th>`).join('')}</tr></thead>
@@ -5298,31 +5380,53 @@ function _printTable(title,rows,headers,rowFn){
 // ══════════════════════════════════════════════════════════════
 function rGraphiques(){ rGraphEmissions(); rGraphCaisse(); }
 
+/* [v4.9] Graphiques Chart.js interactifs */
+let _chartEm=null,_chartCa=null;
+const MOIS_FR=['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'];
+
 function rGraphEmissions(){
-  const el=document.getElementById('graph_emissions'); if(!el)return;
+  const el=document.getElementById('graph_emissions');if(!el)return;
+  if(typeof Chart==='undefined'){el.innerHTML='<div style="color:var(--mu);font-size:.72rem;text-align:center;padding:20px">Chart.js non chargé.</div>';return;}
   const sid=document.getElementById('f_soc')?.value||'';
-  const data={};
+  const data={LVG:{},LVD:{},DF10:{}};
   db.lots.filter(l=>!sid||l.sid===sid).forEach(l=>{
-    if(!l.date)return;
-    const m=l.date.slice(0,7);
-    data[m]=(data[m]||0)+l.qte;
-  });
-  const mois=Object.keys(data).sort();
-  if(mois.length<2){el.innerHTML='<div style="color:var(--mu);font-size:.72rem;text-align:center;padding:20px">Pas encore assez de données pour afficher un graphique.</div>';return;}
-  const labels=mois.map(m=>{const[y,mo]=m.split('-');return ['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'][parseInt(mo)-1]+' '+y.slice(2);});
-  el.innerHTML=_barChart(labels,mois.map(m=>data[m]),'var(--bl)','LV émises par mois');
+    if(!l.date||!data[l.type])return;const m=l.date.slice(0,7);data[l.type][m]=(data[l.type][m]||0)+l.qte;});
+  const mois=[...new Set(Object.values(data).flatMap(d=>Object.keys(d)))].sort();
+  if(!mois.length){el.innerHTML='<div style="color:var(--mu);font-size:.72rem;text-align:center;padding:20px">Pas encore de données.</div>';return;}
+  const labels=mois.map(m=>{const[y,mo]=m.split('-');return MOIS_FR[parseInt(mo)-1]+' '+y.slice(2);});
+  el.innerHTML='<canvas id="cv_em" height="180"></canvas>';
+  if(_chartEm)_chartEm.destroy();
+  _chartEm=new Chart(document.getElementById('cv_em'),{type:'bar',
+    data:{labels,datasets:[
+      {label:'LVG',data:mois.map(m=>data.LVG[m]||0),backgroundColor:'rgba(201,150,42,0.8)',borderRadius:4},
+      {label:'LVD',data:mois.map(m=>data.LVD[m]||0),backgroundColor:'rgba(77,166,255,0.8)',borderRadius:4},
+      {label:'DF10',data:mois.map(m=>data.DF10[m]||0),backgroundColor:'rgba(46,204,196,0.8)',borderRadius:4}]},
+    options:{responsive:true,plugins:{legend:{labels:{color:'#7a82a0',font:{size:11}}},
+      title:{display:true,text:'Émissions LV par mois',color:'#c5cad8',font:{size:13}}},
+      scales:{x:{stacked:true,ticks:{color:'#7a82a0'},grid:{color:'rgba(42,49,80,0.4)'}},
+        y:{stacked:true,ticks:{color:'#7a82a0'},grid:{color:'rgba(42,49,80,0.4)'}}}}});
 }
 
 function rGraphCaisse(){
-  const el=document.getElementById('graph_caisse'); if(!el)return;
+  const el=document.getElementById('graph_caisse');if(!el)return;
+  if(typeof Chart==='undefined'){el.innerHTML='<div style="color:var(--mu);font-size:.72rem;text-align:center;padding:20px">Chart.js non chargé.</div>';return;}
   const sid=document.getElementById('f_soc')?.value||'';
   const enc={},dec={};
   db.encs.filter(e=>!sid||e.sid===sid).forEach(e=>{if(!e.date)return;const m=e.date.slice(0,7);enc[m]=(enc[m]||0)+e.mnt;});
   db.decs.filter(d=>!sid||d.sid===sid).forEach(d=>{if(!d.date)return;const m=d.date.slice(0,7);dec[m]=(dec[m]||0)+d.mnt;});
   const mois=[...new Set([...Object.keys(enc),...Object.keys(dec)])].sort();
-  if(mois.length<2){el.innerHTML='<div style="color:var(--mu);font-size:.72rem;text-align:center;padding:20px">Pas encore assez de données pour afficher un graphique.</div>';return;}
-  const labels=mois.map(m=>{const[y,mo]=m.split('-');return ['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'][parseInt(mo)-1]+' '+y.slice(2);});
-  el.innerHTML=_doubleBarChart(labels,mois.map(m=>enc[m]||0),mois.map(m=>dec[m]||0));
+  if(!mois.length){el.innerHTML='<div style="color:var(--mu);font-size:.72rem;text-align:center;padding:20px">Pas encore de données caisse.</div>';return;}
+  const labels=mois.map(m=>{const[y,mo]=m.split('-');return MOIS_FR[parseInt(mo)-1]+' '+y.slice(2);});
+  el.innerHTML='<canvas id="cv_ca" height="180"></canvas>';
+  if(_chartCa)_chartCa.destroy();
+  _chartCa=new Chart(document.getElementById('cv_ca'),{type:'line',
+    data:{labels,datasets:[
+      {label:'Encaissements',data:mois.map(m=>enc[m]||0),borderColor:'#2ecc8a',backgroundColor:'rgba(46,204,138,0.1)',fill:true,tension:0.3,pointRadius:4},
+      {label:'Décaissements',data:mois.map(m=>dec[m]||0),borderColor:'#e05a5a',backgroundColor:'rgba(224,90,90,0.1)',fill:true,tension:0.3,pointRadius:4}]},
+    options:{responsive:true,plugins:{legend:{labels:{color:'#7a82a0'}},
+      title:{display:true,text:'Évolution Caisse',color:'#c5cad8',font:{size:13}}},
+      scales:{x:{ticks:{color:'#7a82a0'},grid:{color:'rgba(42,49,80,0.4)'}},
+        y:{ticks:{color:'#7a82a0',callback:function(v){return v>=1e6?(v/1e6).toFixed(1)+'M':v>=1e3?(v/1e3).toFixed(0)+'K':v}},grid:{color:'rgba(42,49,80,0.4)'}}}}});
 }
 
 function _barChart(labels,values,color,label){
@@ -5434,6 +5538,74 @@ function getTotalTimbresLot(lotId){ return db.timbres.filter(t=>t.lotId===lotId)
 // ══════════════════════════════════════════════════════════════
 
 function ouvrirSync(){ exportJSON(); }
+
+// ══════════════════════════════════════════════════════════════
+//  [v4.9] EXPORTS CSV & EXCEL
+// ══════════════════════════════════════════════════════════════
+function exportExcel(section){
+  if(typeof XLSX==='undefined')return alert('Bibliothèque Excel non chargée.');
+  const wb=XLSX.utils.book_new();
+  if(!section||section==='quits'){
+    const d=db.quits.map(q=>{const s=db.socs.find(x=>x.id===q.sid);const tf=db.titresF.find(x=>x.id===q.tfid);
+      return{Date:q.date,Type:q.type,'N° Quittance':q.num,Société:s?s.nom:'?',Titre:tf?tf.nom:'—',Quantité:q.qte,'Montant LV':q.montant,'Total décaissé':q.total,Obs:q.obs||''};});
+    XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(d),'Quittances');
+  }
+  if(!section||section==='lots'){
+    const d=db.lots.map(l=>{const s=db.socs.find(x=>x.id===l.sid);const tf=db.titresF.find(x=>x.id===l.tfid);
+      return{Date:l.date,Type:l.type,Référence:l.ref,Société:s?s.nom:'?',Titre:tf?tf.nom:'—',Quantité:l.qte,Numéros:(l.nums||[]).join(', '),Destination:l.dest||''};});
+    XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(d),'Lots');
+  }
+  if(!section||section==='timbres'){
+    const d=db.timbres.map(t=>{const s=db.socs.find(x=>x.id===t.sid);const lot=db.lots.find(x=>x.id===t.lotId);
+      return{Date:t.date,'N° Quittance':t.num,Société:s?s.nom:'?',Lot:lot?lot.ref:'—','Nb timbres':t.qte,Montant:t.mnt,Numéros:(t.nums||[]).join(', ')};});
+    XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(d),'Timbres');
+  }
+  if(!section||section==='encs'){
+    const d=db.encs.map(e=>{const s=db.socs.find(x=>x.id===e.sid);const tf=db.titresF.find(x=>x.id===e.tfid);
+      return{Date:e.date,Référence:e.ref,Société:s?s.nom:'?',Titre:tf?tf.nom:'—',Type:e.type,Catégorie:e.cat||'',Montant:e.mnt,Obs:e.obs||''};});
+    XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(d),'Encaissements');
+  }
+  if(!section||section==='decs'){
+    const d=db.decs.map(d2=>{const s=db.socs.find(x=>x.id===d2.sid);const tf=db.titresF.find(x=>x.id===d2.tfid);
+      return{Date:d2.date,Référence:d2.ref,Société:s?s.nom:'?',Titre:tf?tf.nom:'—',Type:d2.type,Montant:d2.mnt,Auto:d2.auto?'Oui':'Non',Obs:d2.obs||''};});
+    XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(d),'Décaissements');
+  }
+  XLSX.writeFile(wb,'LVTrack_'+(section||'complet')+'_'+new Date().toISOString().slice(0,10)+'.xlsx');
+}
+
+function exportCSV(section){
+  let rows=[],headers=[];
+  if(section==='quits'){
+    headers=['Date','Type','N° Quittance','Société','Titre','Qté','Montant','Total','Obs'];
+    rows=db.quits.map(q=>{const s=db.socs.find(x=>x.id===q.sid);const tf=db.titresF.find(x=>x.id===q.tfid);
+      return[q.date,q.type,q.num,s?s.nom:'?',tf?tf.nom:'—',q.qte,q.montant,q.total,q.obs||''];});
+  }else if(section==='lots'){
+    headers=['Date','Type','Réf','Société','Titre','Qté','Numéros','Dest'];
+    rows=db.lots.map(l=>{const s=db.socs.find(x=>x.id===l.sid);const tf=db.titresF.find(x=>x.id===l.tfid);
+      return[l.date,l.type,l.ref,s?s.nom:'?',tf?tf.nom:'—',l.qte,(l.nums||[]).join(' '),l.dest||''];});
+  }else if(section==='caisse'){
+    headers=['Type','Date','Réf','Société','Titre','Montant','Obs'];
+    rows=[...db.encs.map(e=>['ENC',e.date,e.ref,(db.socs.find(x=>x.id===e.sid)||{}).nom||'?',(db.titresF.find(x=>x.id===e.tfid)||{}).nom||'—',e.mnt,e.obs||'']),
+          ...db.decs.map(d=>['DEC',d.date,d.ref,(db.socs.find(x=>x.id===d.sid)||{}).nom||'?',(db.titresF.find(x=>x.id===d.tfid)||{}).nom||'—',-d.mnt,d.obs||''])];
+  }
+  const csv=[headers.join(';'),...rows.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(';'))].join('\n');
+  const blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download='LVTrack_'+section+'_'+new Date().toISOString().slice(0,10)+'.csv';a.click();
+}
+
+// ══════════════════════════════════════════════════════════════
+//  [v4.9] IMPRESSION
+// ══════════════════════════════════════════════════════════════
+function imprimerPage(pageId,titre){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('print-target'));
+  const page=document.getElementById(pageId);if(page)page.classList.add('print-target');
+  const sub=document.getElementById('print_subtitle');
+  if(sub)sub.textContent=(titre||'')+' — '+new Date().toLocaleDateString('fr-FR');
+  window.print();
+  setTimeout(()=>{if(page)page.classList.remove('print-target');},500);
+}
+
 /* [FIX v4.8] initDriveFromStorage() supprimé : fonction vide, vestige SharePoint */
 
 function exportJSON(){
@@ -5524,7 +5696,24 @@ function genererHTMLLot(lot){
     .badge-no{background:#fff3cd;color:#856404}
     .footer{margin-top:16px;font-size:9px;color:#aaa;border-top:1px solid #ddd;padding-top:8px;text-align:center}
     @media print{@page{margin:1.5cm}body{margin:0}}
-  </style></head><body>
+  
+/* ═══ [v4.9] STYLES D'IMPRESSION ═══ */
+@media print {
+  * { color: #000 !important; background: #fff !important; box-shadow: none !important; }
+  nav, header, .modal-bg, #loginPage, button, .skip-link, noscript,
+  #print_no { display: none !important; }
+  .page { display: block !important; }
+  .page:not(.print-target) { display: none !important; }
+  table { border-collapse: collapse; width: 100%; font-size: 9pt; }
+  th, td { border: 1px solid #333; padding: 4px 6px; }
+  th { background: #ddd !important; font-weight: bold; }
+  .tag { border: 1px solid #666; padding: 1px 4px; }
+  @page { margin: 15mm; }
+  #print_header { display: block !important; text-align: center; margin-bottom: 16px; border-bottom: 2px solid #000; padding-bottom: 8px; }
+}
+#print_header { display: none; }
+
+</style></head><body>
   <div class="header">
     <div><div class="logo">LVTrack Pro</div><div style="font-size:10px;color:#aaa;margin-top:2px">Gestion des Documents Sécurisés</div></div>
     <div style="text-align:right;font-size:10px;color:#aaa">Imprimé le ${new Date().toLocaleDateString('fr-FR')}</div>
@@ -5571,7 +5760,24 @@ function telechargerPDFLot(){
       return (i>0?'<div style="page-break-before:always"></div>':'')+body;
     }).join('');
     const style=lots[0]?genererHTMLLot(lots[0]).match(/<style>([\s\S]*?)<\/style>/)?.[1]||'':'';
-    const full=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Lots LVTrack</title><style>${style}@media print{@page{margin:1.5cm}}</style></head><body>${html}</body></html>`;
+    const full=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Lots LVTrack</title><style>${style}@media print{@page{margin:1.5cm}}
+/* ═══ [v4.9] STYLES D'IMPRESSION ═══ */
+@media print {
+  * { color: #000 !important; background: #fff !important; box-shadow: none !important; }
+  nav, header, .modal-bg, #loginPage, button, .skip-link, noscript,
+  #print_no { display: none !important; }
+  .page { display: block !important; }
+  .page:not(.print-target) { display: none !important; }
+  table { border-collapse: collapse; width: 100%; font-size: 9pt; }
+  th, td { border: 1px solid #333; padding: 4px 6px; }
+  th { background: #ddd !important; font-weight: bold; }
+  .tag { border: 1px solid #666; padding: 1px 4px; }
+  @page { margin: 15mm; }
+  #print_header { display: block !important; text-align: center; margin-bottom: 16px; border-bottom: 2px solid #000; padding-bottom: 8px; }
+}
+#print_header { display: none; }
+
+</style></head><body>${html}</body></html>`;
     const w=window.open('','_blank','width=900,height=700');
     if(w){ w.document.write(full); w.document.close(); setTimeout(()=>w.print(),400); }
     logAction('Lot','Export PDF tous lots ('+lots.length+')','PDF');
@@ -5609,7 +5815,24 @@ function telechargerZIPLots(){
       return (i>0?'<div style="page-break-before:always;margin-top:30px;border-top:3px solid #0B1E3E"></div>':'')+body;
     }).join('');
     const style=lots[0]?genererHTMLLot(lots[0]).match(/<style>([\s\S]*?)<\/style>/)?.[1]||'':'';
-    const full=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Lots LVTrack</title><style>${style}</style></head><body>${htmls}</body></html>`;
+    const full=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Lots LVTrack</title><style>${style}
+/* ═══ [v4.9] STYLES D'IMPRESSION ═══ */
+@media print {
+  * { color: #000 !important; background: #fff !important; box-shadow: none !important; }
+  nav, header, .modal-bg, #loginPage, button, .skip-link, noscript,
+  #print_no { display: none !important; }
+  .page { display: block !important; }
+  .page:not(.print-target) { display: none !important; }
+  table { border-collapse: collapse; width: 100%; font-size: 9pt; }
+  th, td { border: 1px solid #333; padding: 4px 6px; }
+  th { background: #ddd !important; font-weight: bold; }
+  .tag { border: 1px solid #666; padding: 1px 4px; }
+  @page { margin: 15mm; }
+  #print_header { display: block !important; text-align: center; margin-bottom: 16px; border-bottom: 2px solid #000; padding-bottom: 8px; }
+}
+#print_header { display: none; }
+
+</style></head><body>${htmls}</body></html>`;
     const blob=new Blob([full],{type:'text/html'});
     const url=URL.createObjectURL(blob);
     const a=document.createElement('a');
@@ -6134,35 +6357,35 @@ document.addEventListener('change', function(e){
 const _pjData = {}; // {qq: {nom,type,taille,data}, tt:..., ee:..., cc:...}
 const _pjMaxSize = 5 * 1024 * 1024; // 5 MB
 
+/* [v4.9] genericPJSelectionner : Supabase Storage d'abord, base64 en fallback */
 function genericPJSelectionner(prefix, file){
-  if(!file) return;
-  /* [FIX v4.8] Limite taille PJ pour éviter QuotaExceededError localStorage */
-  if(file.size > 2 * 1024 * 1024){
-    alert('⚠ Fichier trop volumineux ('+(file.size/1024/1024).toFixed(1)+' Mo). Maximum 2 Mo.');
-    return;
-  }
-  if(file.size > _pjMaxSize){
-    alert('Fichier trop volumineux (max 5 Mo).');
-    return;
-  }
-  const ext = (file.name.split('.').pop()||'').toLowerCase();
-  const reader = new FileReader();
-  reader.onload = function(e){
-    _pjData[prefix] = { nom: file.name, type: ext, taille: file.size, data: e.target.result };
-    const icon = ext === 'pdf' ? '📕' : (ext === 'zip' ? '🗜️' : (file.type.startsWith('image/') ? '🖼️' : '📄'));
-    const sz = file.size < 1024*1024 ? Math.round(file.size/1024)+' Ko' : (file.size/1024/1024).toFixed(1)+' Mo';
-    const iconEl = document.getElementById(prefix+'_pj_icon');
-    const nameEl = document.getElementById(prefix+'_pj_name');
-    const sizeEl = document.getElementById(prefix+'_pj_size');
-    const info = document.getElementById(prefix+'_pj_info');
-    const zone = document.getElementById(prefix+'_pj_zone');
-    if(iconEl) iconEl.textContent = icon;
-    if(nameEl) nameEl.textContent = file.name;
-    if(sizeEl) sizeEl.textContent = sz+' · '+ext.toUpperCase();
-    if(info) info.style.display = 'flex';
-    if(zone) zone.style.display = 'none';
-  };
-  reader.readAsDataURL(file);
+  if(!file)return;
+  if(file.size>10*1024*1024){alert('⚠ Max 10 Mo.');return;}
+  const ext=(file.name.split('.').pop()||'').toLowerCase();
+  const icon=ext==='pdf'?'📕':ext==='zip'?'🗜️':'📄';
+  const sz=file.size<1024*1024?Math.round(file.size/1024)+' Ko':(file.size/1024/1024).toFixed(1)+' Mo';
+  const iconEl=document.getElementById(prefix+'_pj_icon');
+  const nameEl=document.getElementById(prefix+'_pj_name');
+  const sizeEl=document.getElementById(prefix+'_pj_size');
+  const info=document.getElementById(prefix+'_pj_info');
+  const zone=document.getElementById(prefix+'_pj_zone');
+  if(iconEl)iconEl.textContent=icon;if(nameEl)nameEl.textContent=file.name;
+  if(sizeEl)sizeEl.textContent=sz+' · '+ext.toUpperCase();
+  if(info)info.style.display='flex';if(zone)zone.style.display='none';
+  
+  if(_pjBucketReady){
+    uploadPJ(file,prefix).then(r=>{
+      if(r)_pjData[prefix]=r;
+      else _genericPJFallback(prefix,file);
+    });
+  } else _genericPJFallback(prefix,file);
+}
+function _genericPJFallback(prefix,file){
+  if(file.size>2*1024*1024){alert('⚠ Mode hors-ligne : max 2 Mo.');return;}
+  const reader=new FileReader();
+  reader.onload=function(e){
+    _pjData[prefix]={nom:file.name,type:(file.name.split('.').pop()||'').toLowerCase(),taille:file.size,data:e.target.result};
+  };reader.readAsDataURL(file);
 }
 
 function genericPJEffacer(prefix){
