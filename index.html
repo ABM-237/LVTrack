@@ -1359,9 +1359,20 @@ button:disabled{opacity:.5;cursor:not-allowed;}
 
 
 <script>
-// [v4.9] Service Worker registration
+// [v5.0] Service Worker — purge ancien cache + réinstallation propre
 if('serviceWorker' in navigator){
-  navigator.serviceWorker.register('sw.js').then(r=>console.log('[SW] OK:',r.scope)).catch(e=>console.warn('[SW]',e.message));
+  // Forcer la suppression de tous les anciens caches
+  if(typeof caches !== 'undefined'){
+    caches.keys().then(keys => keys.forEach(k => caches.delete(k)));
+  }
+  // Désinstaller tous les anciens SW puis réinstaller
+  navigator.serviceWorker.getRegistrations().then(regs => {
+    Promise.all(regs.map(r => r.unregister())).then(() => {
+      navigator.serviceWorker.register('sw.js').then(r => {
+        console.log('[SW] Fresh install OK:', r.scope);
+      }).catch(e => console.warn('[SW]', e.message));
+    });
+  });
 }
 
 const PX=5000, PXT=1000;
