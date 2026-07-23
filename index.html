@@ -1628,7 +1628,7 @@ async function sbPush(){
           actif: p.actif !== false,
           assignation: p.assignation || {socs:[], titres:[]},
           updated_at: new Date().toISOString()
-        }, {onConflict: 'name'});
+        }, {onConflict: 'id'});
       }
       catch(e){ /* silencieux */ }
     }
