@@ -1610,7 +1610,7 @@ async function sbPush(){
       const rows = items.map(i => toRow(col, i));
       for(let i = 0; i < rows.length; i += 100){
         const batch = rows.slice(i, i + 100);
-        const { error } = await _sb.from(m.t).upsert(batch, {onConflict: 'id'});
+        const { error } = await _sb.from(m.t).upsert(batch, {onConflict: 'name'});
         if(error) console.warn('[PUSH]', m.t, error.message);
       }
     }
@@ -1628,7 +1628,7 @@ async function sbPush(){
           actif: p.actif !== false,
           assignation: p.assignation || {socs:[], titres:[]},
           updated_at: new Date().toISOString()
-        }, {onConflict: 'id'});
+        }, {onConflict: 'name'});
       }
       catch(e){ /* silencieux */ }
     }
