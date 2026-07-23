@@ -507,7 +507,7 @@ button:disabled{opacity:.5;cursor:not-allowed;}
     <button id="btn_export_xl" type="button" class="btn sec" style="padding:4px 10px;font-size:.63rem;border-color:rgba(77,166,255,.4);color:var(--bl)" onclick="exportExcel()" title="Exporter en Excel">📊 Excel</button>
     <div id="sync_status" style="font-size:.62rem;color:var(--mu)"></div>
     <button type="button" class="btn sec" style="padding:4px 10px;font-size:.63rem;border-color:rgba(46,204,138,.4);color:var(--gr)" onclick="forcerSync()" title="Forcer la synchronisation avec la base de données">🔄 Sync</button>
-    <button type="button" id="btn_security" class="btn sec" style="padding:4px 10px;font-size:.63rem;border-color:rgba(46,204,196,.4);color:var(--te)" onclick="verifierSecuriteSupabase()" title="Vérifier la sécurité Supabase">🔒 Sécurité</button>
+    <button type="button" id="btn_security" class="btn sec" style="padding:4px 10px;font-size:.63rem;border-color:rgba(46,204,196,.4);color:var(--te)" onclick="verifierSecuriteSupabase()" title="Vérifier la connexion aux tables (ne teste pas les règles RLS)">🔒 Sécurité</button>
     <button type="button" id="btn_restore" class="btn sec" style="padding:4px 10px;font-size:.63rem;border-color:rgba(169,122,255,.4);color:var(--pu)" onclick="restaurerSnapshot()" title="Restaurer depuis un snapshot automatique">⏪ Restaurer</button>
 
     <!-- [FIX P2-13] div onclick remplacé par button pour accessibilité clavier -->
