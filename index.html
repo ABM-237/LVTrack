@@ -500,16 +500,8 @@ button:disabled{opacity:.5;cursor:not-allowed;}
   <h1 class="logo" style="margin:0">LV<span>Track</span></h1>
   <span class="hb lvg">LVG</span><span class="hb lvd">LVD</span><span class="hb df10">DF10</span>
   <div style="margin-left:auto;display:flex;align-items:center;gap:6px;flex-wrap:wrap">
-    <button type="button" id="btn_archive" class="btn sec" style="padding:4px 10px;font-size:.63rem;border-color:rgba(26,188,156,.5);color:var(--te)"  onclick="ouvrirArchive()" title="Archiver l'année et repartir à zéro">📦 Archive</button>
-    <button type="button" id="btn_reset"   class="btn sec" style="padding:4px 10px;font-size:.63rem;border-color:rgba(224,90,90,.3);color:var(--re)"  onclick="confirmerReset()" title="Effacer toutes les données">🗑 Reset</button>
-    <button id="btn_import_json" type="button" class="btn sec" style="padding:4px 10px;font-size:.63rem;border-color:rgba(46,204,138,.4);color:var(--gr)" title="Sauvegarder les données (JSON)" onclick="exportJSON()">
-      💾 JSON
-    </button>
-    <button id="btn_export_xl" type="button" class="btn sec" style="padding:4px 10px;font-size:.63rem;border-color:rgba(77,166,255,.4);color:var(--bl)" onclick="exportExcel()" title="Exporter en Excel">📊 Excel</button>
     <div id="sync_status" style="font-size:.62rem;color:var(--mu)"></div>
     <button type="button" class="btn sec" style="padding:4px 10px;font-size:.63rem;border-color:rgba(46,204,138,.4);color:var(--gr)" onclick="forcerSync()" title="Forcer la synchronisation avec la base de données">🔄 Sync</button>
-    <button type="button" id="btn_security" class="btn sec" style="padding:4px 10px;font-size:.63rem;border-color:rgba(46,204,196,.4);color:var(--te)" onclick="verifierSecuriteSupabase()" title="Vérifier la connexion aux tables (ne teste pas les règles RLS)">🔒 Sécurité</button>
-    <button type="button" id="btn_restore" class="btn sec" style="padding:4px 10px;font-size:.63rem;border-color:rgba(169,122,255,.4);color:var(--pu)" onclick="restaurerSnapshot()" title="Restaurer depuis un snapshot automatique">⏪ Restaurer</button>
 
     <!-- [FIX P2-13] div onclick remplacé par button pour accessibilité clavier -->
     <button type="button" id="user_badge" style="display:flex;align-items:center;gap:7px;background:var(--sur2);border:1px solid var(--bor);border-radius:20px;padding:4px 10px 4px 4px;cursor:pointer;font-family:'DM Mono',monospace" onclick="demanderDeconnexion()" aria-label="Se déconnecter">
@@ -2755,8 +2747,14 @@ function rAdmin(){
 
   html+='<div id="admin_msg" style="margin-top:8px"></div>'
     +'<div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--bor);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">'
-    +''
-    +''
+    +'<div style="display:flex;gap:6px;flex-wrap:wrap">'
+    +'<button type="button" id="btn_archive" class="btn sec" style="padding:4px 10px;font-size:.63rem;border-color:rgba(26,188,156,.5);color:var(--te)" onclick="ouvrirArchive()" title="Archiver l\'année et repartir à zéro">📦 Archive</button>'
+    +'<button type="button" id="btn_reset" class="btn sec" style="padding:4px 10px;font-size:.63rem;border-color:rgba(224,90,90,.3);color:var(--re)" onclick="confirmerReset()" title="Effacer toutes les données">🗑 Reset</button>'
+    +'<button id="btn_import_json" type="button" class="btn sec" style="padding:4px 10px;font-size:.63rem;border-color:rgba(46,204,138,.4);color:var(--gr)" title="Sauvegarder les données (JSON)" onclick="exportJSON()">💾 JSON</button>'
+    +'<button id="btn_export_xl" type="button" class="btn sec" style="padding:4px 10px;font-size:.63rem;border-color:rgba(77,166,255,.4);color:var(--bl)" onclick="exportExcel()" title="Exporter en Excel">📊 Excel</button>'
+    +'<button type="button" id="btn_security" class="btn sec" style="padding:4px 10px;font-size:.63rem;border-color:rgba(46,204,196,.4);color:var(--te)" onclick="verifierSecuriteSupabase()" title="Vérifier la connexion aux tables (ne teste pas les règles RLS)">🔒 Sécurité</button>'
+    +'<button type="button" id="btn_restore" class="btn sec" style="padding:4px 10px;font-size:.63rem;border-color:rgba(169,122,255,.4);color:var(--pu)" onclick="restaurerSnapshot()" title="Restaurer depuis un snapshot automatique">⏪ Restaurer</button>'
+    +'</div>'
     +'<button onclick="resetComptes()" style="background:none;border:1px solid rgba(224,90,90,.3);color:var(--re);font-family:\'DM Mono\',monospace;font-size:.67rem;padding:8px 16px;border-radius:6px;cursor:pointer;font-weight:700;background:rgba(224,90,90,.12);border:1px solid rgba(224,90,90,.5)">'
     +'🗑 REMISE À ZÉRO TOTALE (données + comptes + cloud)</button></div>';
 
