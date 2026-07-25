@@ -1,49 +1,49 @@
 <!DOCTYPE html>
 <!--
   ╔══════════════════════════════════════════════════════════════════╗
-  ║  LVTrack — Version corrigée v4.8 (audit diagnostique complet)   ║
+  ║  LVTrack - Version corrigée v4.8 (audit diagnostique complet)   ║
   ║  Audit + corrections v4.8 réalisés par Claude · 2026-07-18     ║
   ╠══════════════════════════════════════════════════════════════════╣
   ║                                                                 ║
-  ║  🔴 P0 — BUGS CRITIQUES CORRIGÉS (v4.8)                        ║
+  ║  🔴 P0 - BUGS CRITIQUES CORRIGÉS (v4.8)                        ║
   ║  FIX 25 : prets/rmbs ajoutés à TMAP → désormais synchronisés   ║
   ║  FIX 26 : _syncQ orpheline supprimée (utilisait lvt5_sq)       ║
   ║  FIX 27 : timLot() comptait tout-ou-rien → compte réel         ║
   ║                                                                 ║
-  ║  🟠 P1 — SÉCURITÉ CORRIGÉE (v4.8)                              ║
+  ║  🟠 P1 - SÉCURITÉ CORRIGÉE (v4.8)                              ║
   ║  FIX 28 : save() + try-catch QuotaExceededError + alerte user  ║
   ║  FIX 29 : esc() appliqué sur ~30+ innerHTML (XSS user data)   ║
   ║  FIX 30 : PJ limitées à 2 Mo (évite QuotaExceeded localStorage)║
   ║  FIX 31 : Import JSON : validation renforcée des tableaux      ║
   ║  FIX 32 : Avertissement RLS Supabase ajouté dans le code       ║
   ║                                                                 ║
-  ║  🟡 P2 — LOGIQUE MÉTIER CORRIGÉE (v4.8)                        ║
+  ║  🟡 P2 - LOGIQUE MÉTIER CORRIGÉE (v4.8)                        ║
   ║  FIX 33 : getSoldeTF() ne gonfle plus les soldes par titre     ║
   ║  FIX 34 : uid() : 9 chars aléatoires au lieu de 3 (anti-coll.) ║
   ║  FIX 35 : Variable shadowing corrigé dans numsTimbresDuLot()   ║
   ║                                                                 ║
-  ║  🔵 P3 — PERFORMANCE (v4.8)                                    ║
+  ║  🔵 P3 - PERFORMANCE (v4.8)                                    ║
   ║  FIX 36 : renderAll() ne rend que la page active (+ renderAll  ║
   ║          Full pour sync/import). ÷4 à ÷10 itérations.         ║
   ║  FIX 37 : Pagination 50/page sur quittances et lots            ║
   ║                                                                 ║
-  ║  ⚪ P4 — NETTOYAGE (v4.8)                                      ║
+  ║  ⚪ P4 - NETTOYAGE (v4.8)                                      ║
   ║  FIX 38 : Code mort supprimé : nxtN(), initDriveFromStorage(), ║
   ║          majStatusCloud(), setSyncMeta()                       ║
   ║  FIX 39 : manifest.json désactivé (fichier absent)             ║
   ║  FIX 40 : sbPush() retry automatique (3 tentatives, backoff)   ║
-  ║  FIX 41 : escD() helper ajouté (esc + fallback '—')           ║
+  ║  FIX 41 : escD() helper ajouté (esc + fallback '-')           ║
   ║                                                                 ║
   ╠══════════════════════════════════════════════════════════════════╣
   ║                                                                 ║
-  ║  🔴 P0 — BUGS CRITIQUES CORRIGÉS (round 1)                     ║
+  ║  🔴 P0 - BUGS CRITIQUES CORRIGÉS (round 1)                     ║
   ║  FIX 1  : Double chargement xlsx (cdnjs + jsdelivr)             ║
   ║  FIX 2  : Double display:none/flex sur #lot_pj_info             ║
   ║  FIX 3  : adminBtn jamais déclaré → ReferenceError              ║
   ║  FIX 4  : </option> manquant dans fillSels()                    ║
   ║  FIX 5  : Référence à btn_drive inexistant supprimée            ║
   ║                                                                 ║
-  ║  🔴 P0 — BUGS CRITIQUES CORRIGÉS (round 2 — chirurgical)       ║
+  ║  🔴 P0 - BUGS CRITIQUES CORRIGÉS (round 2 - chirurgical)       ║
   ║  FIX A  : Classes .kpi/.kv/.kl/.ks/.c-green/.c-red NON DÉFINIES ║
   ║          dans le CSS → KPIs caisse sans aucun style. Ajoutées. ║
   ║  FIX B  : Typo CSS var(--bd) → var(--bor) (ligne 1037)          ║
@@ -54,10 +54,10 @@
   ║            addPret(), addRmb(), togglePerm()                   ║
   ║          → toutes ces fonctions référençaient des IDs DOM       ║
   ║            inexistants (dKpi, dEtat, r_pret, p_soc...).        ║
-  ║  FIX F  : rRapproch() supprimée — référençait #rapproch        ║
+  ║  FIX F  : rRapproch() supprimée - référençait #rapproch        ║
   ║          inexistant (déjà couvert par rSocs() / #socStockList).║
   ║                                                                 ║
-  ║  🟢 MISE EN PAGE — AMÉLIORATIONS PROFESSIONNELLES               ║
+  ║  🟢 MISE EN PAGE - AMÉLIORATIONS PROFESSIONNELLES               ║
   ║  MEP 1  : Grilles fixes repeat(3,1fr)/(4,1fr) → auto-fit        ║
   ║          responsive (KPIs caisse, admin, dashboard)            ║
   ║  MEP 2  : Breakpoints mobile <600px : padding/font/touch        ║
@@ -75,7 +75,7 @@
   ║  MEP 11 : Inputs date/number color-scheme:dark                  ║
   ║  MEP 12 : Header : layout responsif amélioré sur petit écran   ║
   ║                                                                 ║
-  ║  🟠 P1 — CODE MORT SUPPRIMÉ (round 1)                          ║
+  ║  🟠 P1 - CODE MORT SUPPRIMÉ (round 1)                          ║
   ║  FIX 6  : 5 fonctions déclarées en double                       ║
   ║  FIX 7  : Constante SP_PROF_PATH inutilisée                     ║
   ║  FIX 8  : refreshSavedProfiles() vide + 5 appels               ║
@@ -83,7 +83,7 @@
   ║  FIX 10 : Wrappers tryLogin/creerCompte aplatis                 ║
   ║  FIX 11 : const isAd=false jamais lue                           ║
   ║                                                                 ║
-  ║  🟡 P2 — SÉCURITÉ & BONNES PRATIQUES                           ║
+  ║  🟡 P2 - SÉCURITÉ & BONNES PRATIQUES                           ║
   ║  FIX 12 : span onclick dans button → onclick sur button         ║
   ║  FIX 13 : div onclick user_badge → button accessible            ║
   ║  FIX 14 : Ajout fonction esc() anti-XSS + application           ║
@@ -91,7 +91,7 @@
   ║  FIX 20 : type="button" sur nav et header buttons               ║
   ║  FIX 22 : Avertissement sécurité sur hashPass (DJB2)            ║
   ║                                                                 ║
-  ║  🔵 P3 — SÉMANTIQUE & ACCESSIBILITÉ                            ║
+  ║  🔵 P3 - SÉMANTIQUE & ACCESSIBILITÉ                            ║
   ║  FIX 16 : Logo promu en h1                                      ║
   ║  FIX 17 : aria-label sur nav                                    ║
   ║  FIX 18 : meta description, theme-color, noscript               ║
@@ -110,32 +110,32 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- [FIX P3-18] meta description et theme-color ajoutés -->
-<meta name="description" content="LVTrack — Gestion des lettres de voiture (LVG, LVD, DF10), quittances et timbres pour sociétés forestières.">
+<meta name="description" content="LVTrack - Gestion des lettres de voiture (LVG, LVD, DF10), quittances et timbres pour sociétés forestières.">
 <meta name="theme-color" content="#0f1117">
 
 <!-- [FIX SEO] Open Graph + Twitter Card + Favicon -->
 <meta property="og:type" content="website">
-<meta property="og:title" content="LVTrack — Gestion LVG / LVD / DF10">
+<meta property="og:title" content="LVTrack - Gestion LVG / LVD / DF10">
 <meta property="og:description" content="Application de gestion des lettres de voiture, quittances, timbres et caisse pour sociétés forestières.">
 <meta property="og:locale" content="fr_FR">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="LVTrack — Gestion LVG / LVD / DF10">
+<meta name="twitter:title" content="LVTrack - Gestion LVG / LVD / DF10">
 <meta name="twitter:description" content="Gestion des lettres de voiture et quittances forestières.">
 <link rel="icon" href="icon-192.png">
-<title>LVTrack v4.8 — LVG / LVD / DF10</title>
+<title>LVTrack v4.8 - LVG / LVD / DF10</title>
 <!-- [FIX PERF] Preconnect pour les fonts Google -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <!-- [FIX PERF] Réduit de 7 à 3 variantes de font (seules celles utilisées dans le CSS) -->
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-<!-- [DB] Client Supabase — 3 CDN en fallback (réseau Cameroun) -->
+<!-- [DB] Client Supabase - 3 CDN en fallback (réseau Cameroun) -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.1/dist/umd/supabase.min.js"
   onerror="this.onerror=null;this.src='https://unpkg.com/@supabase/supabase-js@2.49.1/dist/umd/supabase.min.js'"
 ></script>
 <style>
 /* ═══════════════════════════════════════════════════════════════
-   LVTrack CSS — REWRITE mobile-first
+   LVTrack CSS - REWRITE mobile-first
    Breakpoints: 320px (base) → 600px → 900px → 1200px
    ═══════════════════════════════════════════════════════════════ */
 :root{
@@ -409,7 +409,7 @@ button:disabled{opacity:.5;cursor:not-allowed;}
 #print_header { display: none; }
 
 </style>
-<!-- [FIX v4.8] Manifest PWA inline (data URI) — plus besoin de manifest.json externe -->
+<!-- [FIX v4.8] Manifest PWA inline (data URI) - plus besoin de manifest.json externe -->
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-180.png">
 <!-- [FIX] meta theme-color déjà défini plus haut (ligne 51), suppression du doublon -->
@@ -431,7 +431,7 @@ button:disabled{opacity:.5;cursor:not-allowed;}
   </div>
 </noscript>
 
-<div id="print_header"><h1>LVTrack — Rapport</h1><p id="print_subtitle"></p></div>
+<div id="print_header"><h1>LVTrack - Rapport</h1><p id="print_subtitle"></p></div>
 <!-- [A11Y] Skip link pour navigation clavier directe au contenu -->
 <a href="#main-content" class="skip-link">Aller au contenu principal</a>
 
@@ -506,7 +506,7 @@ button:disabled{opacity:.5;cursor:not-allowed;}
     <!-- [FIX P2-13] div onclick remplacé par button pour accessibilité clavier -->
     <button type="button" id="user_badge" style="display:flex;align-items:center;gap:7px;background:var(--sur2);border:1px solid var(--bor);border-radius:20px;padding:4px 10px 4px 4px;cursor:pointer;font-family:'DM Mono',monospace" onclick="demanderDeconnexion()" aria-label="Se déconnecter">
       <div id="user_avatar" style="width:24px;height:24px;border-radius:50%;background:var(--ac);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:700;font-size:.7rem;color:#000">?</div>
-      <span id="user_name_disp" style="font-size:.68rem;color:var(--tx)">—</span>
+      <span id="user_name_disp" style="font-size:.68rem;color:var(--tx)">-</span>
       <span style="font-size:.58rem;color:var(--mu)">↩</span>
     </button>
   </div>
@@ -617,13 +617,13 @@ button:disabled{opacity:.5;cursor:not-allowed;}
 
   <!-- RESTE À UTILISER PAR LOT -->
   <div class="card">
-    <h3><span class="dot" style="background:var(--or)"></span>Lots — Numéros restants à utiliser</h3>
+    <h3><span class="dot" style="background:var(--or)"></span>Lots - Numéros restants à utiliser</h3>
     <div id="dashResteUtiliser"></div>
   </div>
 
   <!-- LOTS TIMBRAGE -->
   <div class="card">
-    <h3><span class="dot" style="background:var(--pu)"></span>Lots LVG / LVD — Validation timbres</h3>
+    <h3><span class="dot" style="background:var(--pu)"></span>Lots LVG / LVD - Validation timbres</h3>
     <div id="dashLots"></div>
   </div>
 
@@ -654,7 +654,7 @@ button:disabled{opacity:.5;cursor:not-allowed;}
       <div id="graph_emissions"></div>
     </div>
     <div class="card">
-      <h3><span class="dot" style="background:var(--gr)"></span>Évolution caisse — Encaissements / Décaissements</h3>
+      <h3><span class="dot" style="background:var(--gr)"></span>Évolution caisse - Encaissements / Décaissements</h3>
       <div id="graph_caisse"></div>
     </div>
   </div>
@@ -802,7 +802,7 @@ button:disabled{opacity:.5;cursor:not-allowed;}
         </select>
       </div>
       <div class="fg"><label for="l_r">Réf. lot</label><input id="l_r" placeholder="LOT-LVG-2024-01"></div>
-      <div class="fg"><label for="l_qte_lv">Quantité LV <span style="color:var(--mu);font-size:.6rem">auto</span></label><input type="number" id="l_qte_lv" placeholder="—" min="1" readonly style="border-color:var(--bor)"></div>
+      <div class="fg"><label for="l_qte_lv">Quantité LV <span style="color:var(--mu);font-size:.6rem">auto</span></label><input type="number" id="l_qte_lv" placeholder="-" min="1" readonly style="border-color:var(--bor)"></div>
       <div class="fg"><label for="l_d">Date</label><input type="date" id="l_d"></div>
     </div>
     <!-- Zone de saisie des numéros LV -->
@@ -918,7 +918,7 @@ button:disabled{opacity:.5;cursor:not-allowed;}
       <div class="fg"><label for="t_s">Société</label><select id="t_s" onchange="rfTim()"></select></div>
       <div class="fg"><label for="t_lot">Lot concerné</label><select id="t_lot" onchange="rfTim()"><option value="">-- Choisir lot --</option></select></div>
       <div class="fg"><label for="t_n">N° Quittance timbre</label><input id="t_n" placeholder="QT-2024-001"></div>
-      <div class="fg"><label for="t_q">Nb timbres <span style="color:var(--pu);font-size:.6rem">auto</span></label><input type="number" id="t_q" placeholder="—" min="1" readonly style="border-color:var(--bor)"></div>
+      <div class="fg"><label for="t_q">Nb timbres <span style="color:var(--pu);font-size:.6rem">auto</span></label><input type="number" id="t_q" placeholder="-" min="1" readonly style="border-color:var(--bor)"></div>
       <div class="fg"><label for="t_m">Montant (F)</label><input type="number" id="t_m" placeholder="50000" min="0"></div>
       <div class="fg"><label for="t_d">Date</label><input type="date" id="t_d"></div>
       <div class="fg"><label for="t_o">Obs.</label><input id="t_o" placeholder="Optionnel"></div>
@@ -972,7 +972,7 @@ button:disabled{opacity:.5;cursor:not-allowed;}
     </div>
   </div>
 
-  <!-- KPIs caisse globaux — [FIX MISE EN PAGE] grille gérée par CSS pour responsive -->
+  <!-- KPIs caisse globaux - [FIX MISE EN PAGE] grille gérée par CSS pour responsive -->
   <div id="cKpi" style="display:grid;gap:11px;margin-bottom:13px"></div>
 
   <div class="g2">
@@ -996,15 +996,15 @@ button:disabled{opacity:.5;cursor:not-allowed;}
         </div>
         <div class="fg"><label for="e_nat">Nature (document)</label>
           <select id="e_nat" onchange="rfEncMontant()">
-            <option value="LVG">LVG — 5 000 F/u</option>
-            <option value="LVD">LVD — 5 000 F/u</option>
-            <option value="DF10">DF10 — 5 000 F/u</option>
-            <option value="Timbre">Timbre — 1 000 F/u</option>
+            <option value="LVG">LVG - 5 000 F/u</option>
+            <option value="LVD">LVD - 5 000 F/u</option>
+            <option value="DF10">DF10 - 5 000 F/u</option>
+            <option value="Timbre">Timbre - 1 000 F/u</option>
             <option value="Autre">Autre</option>
           </select>
         </div>
         <div class="fg"><label for="e_q">Quantité <span style="color:var(--mu);font-size:.6rem">documents</span></label><input type="number" id="e_q" placeholder="50" min="1" oninput="rfEncMontant()"></div>
-        <div class="fg"><label for="e_m">Montant (F) <span style="color:var(--mu);font-size:.6rem">auto</span></label><input type="number" id="e_m" placeholder="—" min="0" style="border-color:var(--gr)"></div>
+        <div class="fg"><label for="e_m">Montant (F) <span style="color:var(--mu);font-size:.6rem">auto</span></label><input type="number" id="e_m" placeholder="-" min="0" style="border-color:var(--gr)"></div>
         <div class="fg"><label for="e_r">Référence</label><input id="e_r" placeholder="ENC-2024-01"></div>
         <div class="fg"><label for="e_d">Date</label><input type="date" id="e_d"></div>
         <div class="fg"><label for="e_o">Obs.</label><input id="e_o" placeholder="Optionnel"></div>
@@ -1147,7 +1147,7 @@ button:disabled{opacity:.5;cursor:not-allowed;}
 
 <!-- ========== ADMIN ========== -->
 <div id="admin" class="page">
-  <h2>⚙ Administration — <span>Gestion des utilisateurs & accès</span></h2>
+  <h2>⚙ Administration - <span>Gestion des utilisateurs & accès</span></h2>
   <div id="adminPage"></div>
 </div>
 
@@ -1253,7 +1253,7 @@ button:disabled{opacity:.5;cursor:not-allowed;}
 
 </main>
 
-<!-- Modal validation timbre — sélection par numéros individuels -->
+<!-- Modal validation timbre - sélection par numéros individuels -->
 <div class="modal-bg" id="timValModal" role="dialog" aria-modal="true">
   <div class="modal" style="max-width:620px">
     <h3 id="tvTitle">Valider les timbres</h3>
@@ -1352,7 +1352,7 @@ button:disabled{opacity:.5;cursor:not-allowed;}
 
 
 <script>
-// [v5.0] Service Worker — purge ancien cache + réinstallation propre
+// [v5.0] Service Worker - purge ancien cache + réinstallation propre
 if('serviceWorker' in navigator){
   // Forcer la suppression de tous les anciens caches
   if(typeof caches !== 'undefined'){
@@ -1380,8 +1380,8 @@ let db=JSON.parse(localStorage.getItem('lvt5')||'null')||{socs:[],quits:[],lots:
 /* [FIX P2-14] Fonction d'échappement HTML pour prévenir les injections XSS.
    À utiliser partout où des données utilisateur sont injectées via innerHTML. */
 function esc(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
-/* [FIX v4.8] escOrDash : échappement XSS avec fallback '—' pour les valeurs nulles */
-function escD(s){return s?esc(s):'—';}
+/* [FIX v4.8] escOrDash : échappement XSS avec fallback '-' pour les valeurs nulles */
+function escD(s){return s?esc(s):'-';}
 // Migrations
 if(!db.titresF)db.titresF=[];
 if(!db.utilisations)db.utilisations=[];
@@ -1397,7 +1397,7 @@ function save(){
 }
 
 // ╔══════════════════════════════════════════════════════════════╗
-// ║  MODULE SYNC — Supabase offline-first                       ║
+// ║  MODULE SYNC - Supabase offline-first                       ║
 // ║  Données en localStorage + sync cloud quand connecté        ║
 // ╚══════════════════════════════════════════════════════════════╝
 
@@ -1630,7 +1630,7 @@ async function sbPush(){
   }
   catch(e){
     console.error('[PUSH]', e);
-    syncUI('⚠ Sync échouée — réessai auto', 'var(--re)');
+    syncUI('⚠ Sync échouée - réessai auto', 'var(--re)');
     /* [FIX v4.8] Retry automatique après échec push (max 3 tentatives) */
     if(!sbPush._retries) sbPush._retries = 0;
     if(sbPush._retries < 3){
@@ -1638,7 +1638,7 @@ async function sbPush(){
       setTimeout(()=>{ sbPush().then(()=>{ sbPush._retries=0; }); }, 5000 * sbPush._retries);
     } else {
       sbPush._retries = 0;
-      syncUI('❌ Sync échouée — cliquez 🔄 Sync', 'var(--re)');
+      syncUI('❌ Sync échouée - cliquez 🔄 Sync', 'var(--re)');
     }
   }
 }
@@ -1803,7 +1803,7 @@ function forcerSync(){
 // ── FIN MODULE SYNC v2 ──
 
 // ══════════════════════════════════════════════════════════════
-//  [v4.9] SUPABASE STORAGE — PJ dans le cloud (1 Go gratuit / 100 Go Pro)
+//  [v4.9] SUPABASE STORAGE - PJ dans le cloud (1 Go gratuit / 100 Go Pro)
 // ══════════════════════════════════════════════════════════════
 const PJ_BUCKET='pj';
 let _pjBucketReady=false;
@@ -1813,7 +1813,7 @@ async function initPJBucket(){
   try{
     const{error}=await _sb.storage.from(PJ_BUCKET).list('',{limit:1});
     if(!error){_pjBucketReady=true;console.log('[STORAGE] Bucket PJ prêt');}
-    else console.warn('[STORAGE] Bucket PJ indisponible:',error.message,'— Créez-le dans Supabase → Storage → New bucket "pj" (public)');
+    else console.warn('[STORAGE] Bucket PJ indisponible:',error.message,'- Créez-le dans Supabase → Storage → New bucket "pj" (public)');
   }catch(e){console.warn('[STORAGE]',e.message);}
 }
 
@@ -1947,7 +1947,7 @@ async function verifierSecuriteSupabase(){
       const {data,error} = await _sb.from(t).select('id').limit(1);
       if(error){
         if(error.message.includes('does not exist') || error.code === '42P01')
-          results.push('⚠️ Table "'+t+'" : N\'EXISTE PAS — à créer dans Supabase');
+          results.push('⚠️ Table "'+t+'" : N\'EXISTE PAS - à créer dans Supabase');
         else if(error.message.includes('permission denied'))
           results.push('✅ Table "'+t+'" : RLS ACTIF (protégée)');
         else
@@ -1994,7 +1994,7 @@ async function verifierSecuriteSupabase(){
 function confirmerReset(){ resetComptes(); }
 
 function fmt(n){return Number(n||0).toLocaleString('fr-FR')+' F';}
-function fd(d){return d?new Date(d).toLocaleDateString('fr-FR'):'—';}
+function fd(d){return d?new Date(d).toLocaleDateString('fr-FR'):'-';}
 /* [FIX v4.8] uid amélioré : 9 chars aléatoires au lieu de 3 (collision ~1/10^14 vs 1/47000) */
 function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,11);}
 function today(){return new Date().toISOString().slice(0,10);}
@@ -2057,7 +2057,7 @@ function fillSels(){
   // Filtre dashboard
   const fs=document.getElementById('f_soc');
   if(fs){const v=fs.value;fs.innerHTML='<option value="">Toutes les sociétés</option>'+os;if(v)fs.value=v;}
-  // Filtre titre forestier — filtré selon société + assignation agent
+  // Filtre titre forestier - filtré selon société + assignation agent
   const ftf=document.getElementById('f_tf');
   if(ftf){
     const fSocVal=document.getElementById('f_soc')?.value||'';
@@ -2155,7 +2155,7 @@ const PERMS_ADMIN  = Object.fromEntries(Object.keys(PAGES).map(k=>[k,'write']));
 const PERMS_DEFAUT = {}; // L'admin définit tous les droits
 
 /* ═══════════════════════════════════════════════════════════════
-   AUTHENTIFICATION via Supabase Auth (v2 — Phase 2)
+   AUTHENTIFICATION via Supabase Auth (v2 - Phase 2)
    Remplace le système DJB2 + localStorage par auth.signInWithPassword
    ═══════════════════════════════════════════════════════════════ */
 
@@ -2460,7 +2460,7 @@ function goIfAllowed(page){
     toast.style.cssText='position:fixed;top:68px;left:50%;transform:translateX(-50%);background:var(--re);color:#fff;padding:9px 20px;border-radius:8px;font-size:.75rem;z-index:9999;font-family:"DM Mono",monospace;pointer-events:none;transition:opacity .3s';
     document.body.appendChild(toast);
   }
-  toast.textContent='🔒 Accès refusé — contactez l\'administrateur';
+  toast.textContent='🔒 Accès refusé - contactez l\'administrateur';
   toast.style.opacity='1';
   clearTimeout(toast._t);
   toast._t=setTimeout(()=>toast.style.opacity='0',2200);
@@ -2535,7 +2535,7 @@ async function resetComptes(){
       await new Promise(r=>setTimeout(r,1200));
     }
   } else {
-    upd('📴 Hors ligne — purge locale uniquement.','var(--or)');
+    upd('📴 Hors ligne - purge locale uniquement.','var(--or)');
     await new Promise(r=>setTimeout(r,800));
   }
 
@@ -2574,7 +2574,7 @@ function rAdmin(){
 
   let html='';
 
-  // KPIs — [FIX MISE EN PAGE] grille responsive (auto-fit)
+  // KPIs - [FIX MISE EN PAGE] grille responsive (auto-fit)
   html+='<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:11px;margin-bottom:18px">';
   [['Total',nbTotal,'var(--bl)'],['Actifs',nbActifs,'var(--gr)'],['En attente',nbAttente,'var(--or)'],['Désactivés',nbDesact,'var(--re)']].forEach(function(r){
     html+='<div style="background:var(--sur);border:1px solid var(--bor);border-top:3px solid '+r[2]+';border-radius:var(--r);padding:13px 15px">'
@@ -2677,7 +2677,7 @@ function rAdmin(){
   // ═══ ONGLET SOCIÉTÉS & TITRES ASSIGNÉS ═══
   html+='<div id="admin_tab_societes" style="display:none">';
   html+='<div class="note" style="margin-bottom:14px;line-height:1.9">'
-    +'<strong style="color:var(--ac)">Assignation Sociétés & Titres</strong> — Définissez pour chaque agent les sociétés et titres forestiers auxquels il a accès.<br>'
+    +'<strong style="color:var(--ac)">Assignation Sociétés & Titres</strong> - Définissez pour chaque agent les sociétés et titres forestiers auxquels il a accès.<br>'
     +'Un agent peut être assigné à <strong>plusieurs sociétés</strong> et <strong>plusieurs titres</strong> au sein de chaque société.<br>'
     +'Les données (quittances, lots, timbres, caisse) sont automatiquement filtrées selon ses assignations.'
     +'</div>';
@@ -3054,7 +3054,7 @@ function rSocs(){
     if(!tfs.length){
       tfsHtml='<div style="padding:10px 15px;font-size:.72rem;color:var(--mu);font-style:italic;'
         +'border:1px dashed var(--bor);border-radius:6px;text-align:center">'
-        +'Aucun titre forestier — ajoutez-en un via le formulaire ci-dessus</div>';
+        +'Aucun titre forestier - ajoutez-en un via le formulaire ci-dessus</div>';
     } else {
       var cards=tfs.map(function(tf){
         var docs=['LVG','LVD','DF10'].map(function(tp){
@@ -3103,7 +3103,7 @@ function rSocs(){
           return '<td style="text-align:center">'
             +(qAch?'<div><span class="tag '+TI[tp].cls+'" style="font-size:.6rem">'+qStk+' stk</span></div>'
               +'<div style="font-size:.58rem;color:var(--mu);margin-top:2px">'+qAch+'a · '+qEm+'é</div>'
-              :'<span style="color:var(--bor)">—</span>')
+              :'<span style="color:var(--bor)">-</span>')
             +'</td>';
         }).join('')
         +'</tr>';
@@ -3117,7 +3117,7 @@ function rSocs(){
         return '<td style="text-align:center">'
           +(qAch?'<div><span class="tag '+(qStk>0?TI[tp].cls:'r')+'" style="font-weight:700">'+qStk+'</span></div>'
             +'<div style="font-size:.58rem;color:var(--mu);margin-top:2px">'+qAch+' ach · '+qEm+' em</div>'
-            :'<span style="color:var(--mu)">—</span>')
+            :'<span style="color:var(--mu)">-</span>')
           +'</td>';
       }).join('')
       +'</tr>'+tfRows;
@@ -3163,7 +3163,7 @@ function rfQuitMontant(){
     if(mntEl)mntEl.value=mntLV;
     if(inf){
       inf.innerHTML='Montant LV : <strong style="color:var(--re)">'+Number(mntLV).toLocaleString('fr-FR')+' F</strong>'
-        +' — Ce montant sera <strong style="color:var(--re)">décaissé automatiquement</strong> de la caisse';
+        +' - Ce montant sera <strong style="color:var(--re)">décaissé automatiquement</strong> de la caisse';
     }
   } else {
     if(mntEl)mntEl.value='';
@@ -3194,7 +3194,7 @@ function addQ(){
   } else {
     soldeAvant=getSoldeTF(sid,tfid);
   }
-  if(soldeAvant<mntNecessaire)return mg('msg_q','⚠ Fonds insuffisants — Solde disponible : '+fmt(soldeAvant)+' · Montant nécessaire : '+fmt(mntNecessaire)+'.','err');
+  if(soldeAvant<mntNecessaire)return mg('msg_q','⚠ Fonds insuffisants - Solde disponible : '+fmt(soldeAvant)+' · Montant nécessaire : '+fmt(mntNecessaire)+'.','err');
 
   const mntLV=qte*PX;
   const mntTotal=mntLV;
@@ -3212,23 +3212,23 @@ function addQ(){
     mnt:mntTotal,
     ref:num,
     date,
-    obs:'Achat '+qte+' '+tp+(grp?' — Groupe: '+grp:tfLabel?' — Titre '+tfLabel:'')+(obs?' — '+obs:''),
+    obs:'Achat '+qte+' '+tp+(grp?' - Groupe: '+grp:tfLabel?' - Titre '+tfLabel:'')+(obs?' - '+obs:''),
     auto:true,
     quitId
   });
 
   save();
-  logAction('Quittance','Achat '+qte+' '+tp+' — '+num,num);
+  logAction('Quittance','Achat '+qte+' '+tp+' - '+num,num);
   renderAll();
   genericPJReset('qq');
   ['qq_n','qq_q','qq_o','qq_mnt'].forEach(i=>{const e=document.getElementById(i);if(e)e.value='';});
   document.getElementById('qq_inf').innerHTML='';
-  mg('msg_q',qte+' '+tp+' enregistrés'+(grp?' — Groupe: '+grp:tfLabel?' — Titre: '+tfLabel:'')+' — Décaissement : '+Number(mntTotal).toLocaleString('fr-FR')+' F','ok');
+  mg('msg_q',qte+' '+tp+' enregistrés'+(grp?' - Groupe: '+grp:tfLabel?' - Titre: '+tfLabel:'')+' - Décaissement : '+Number(mntTotal).toLocaleString('fr-FR')+' F','ok');
 }
 function rQuits(){
   const t=document.getElementById('qList');
   if(!db.quits.length){t.innerHTML='<div class="empty">Aucune quittance.</div>';return;}
-  /* [FIX v4.8] Pagination ajoutée — 50 lignes max par page */
+  /* [FIX v4.8] Pagination ajoutée - 50 lignes max par page */
   if(!rQuits._page) rQuits._page=1;
   const PAGE_SIZE=50;
   const _qFrom=document.getElementById('q_date_from')?.value||'';
@@ -3247,12 +3247,12 @@ function rQuits(){
       +'<td><span class="tag '+(TI[q.type]?.cls||'a')+'">'+q.type+'</span></td>'
       +'<td><strong>'+esc(q.num)+'</strong></td>'
       +'<td>'+(s?esc(s.nom):'?')+'</td>'
-      +'<td style="color:var(--bl);font-size:.7rem">'+(q.groupe?'<span style="background:var(--te);color:#000;padding:2px 6px;border-radius:4px;font-size:.65rem">⬡ '+esc(q.groupe)+'</span>':tf?esc(tf.nom):'—')+'</td>'
+      +'<td style="color:var(--bl);font-size:.7rem">'+(q.groupe?'<span style="background:var(--te);color:#000;padding:2px 6px;border-radius:4px;font-size:.65rem">⬡ '+esc(q.groupe)+'</span>':tf?esc(tf.nom):'-')+'</td>'
       +'<td style="text-align:right">'+q.qte+'</td>'
       +'<td style="text-align:right">'+Number(mntLV).toLocaleString('fr-FR')+' F</td>'
       +'<td style="text-align:right;font-weight:700;color:var(--re)">'+Number(mntTotal).toLocaleString('fr-FR')+' F</td>'
       +'<td><span class="tag r" style="font-size:.6rem">Décaissé ✓</span></td>'
-      +'<td style="color:var(--mu)">'+(q.obs?esc(q.obs):'—')+'</td>'
+      +'<td style="color:var(--mu)">'+(q.obs?esc(q.obs):'-')+'</td>'
       +'<td><button class="btn sm sec" onclick="delQuittance(\''+q.id+'\')" title="Supprimer">✕</button></td>'
       +'</tr>';
   }).join('');
@@ -3289,7 +3289,7 @@ function rfLot(){
     const n=nums.length;
     const ok=n>=1&&n<=25;
     lbl.style.color=n===0?'var(--mu)':ok?'var(--gr)':'var(--re)';
-    var sfx=n>1?'s':'';var warn=n>25?' — maximum 25 !':'';
+    var sfx=n>1?'s':'';var warn=n>25?' - maximum 25 !':'';
     lbl.textContent=n===0?'(0 numéro saisi)':'('+n+'/25 numéro'+sfx+warn+')';
   }
   // Mettre à jour le champ quantité LV
@@ -3319,7 +3319,7 @@ function rfLot(){
     const tf=db.titresF.find(x=>x.id===tfid);
     const ap=total-qte;
     let msg=`<strong style="color:var(--bl)">${tf?tf.nom:'?'}</strong> · Stock propre : <strong style="color:${propre>0?'var(--gr)':'var(--re)'}">${propre}</strong>`;
-    if(propre===0&&emprunte>0) msg+=` <span style="color:var(--or)">⚠ épuisé — ${emprunte} dispo (autres titres)</span>`;
+    if(propre===0&&emprunte>0) msg+=` <span style="color:var(--or)">⚠ épuisé - ${emprunte} dispo (autres titres)</span>`;
     if(qte>0) msg+=` · Après : <strong style="color:${ap>=0?'var(--gr)':'var(--re)'}">${ap}</strong>`;
     inf.innerHTML=msg;
   } else {
@@ -3413,7 +3413,7 @@ function emL(){
     const tf=db.titresF.find(x=>x.id===tfid);
     if(qte>stockPropre){
       const emprunt=qte-Math.max(0,stockPropre);
-      avertissement=` ⚡ ${emprunt} puisé(s) sur autres titres — lot au nom de ${tf?tf.nom:'ce titre'}`;
+      avertissement=` ⚡ ${emprunt} puisé(s) sur autres titres - lot au nom de ${tf?tf.nom:'ce titre'}`;
     }
   }
 
@@ -3472,7 +3472,7 @@ function rLots(){
     const util=numsUtilisesLot(l.id).length;
     const total=(l.nums||[]).length;
     const restantes=total-util;
-    const tTag=nT?'<span class="tag t">—</span>':
+    const tTag=nT?'<span class="tag t">-</span>':
       tim>=total?'<span class="tag g">Tout timbré</span>':
       tim>0?'<span class="tag o">'+tim+'/'+total+'</span>':'<span class="tag o">0 timbré</span>';
     const uTag=util>=total?'<span class="tag g">Tout utilisé</span>':
@@ -3483,10 +3483,10 @@ function rLots(){
       +'<td><span class="tag '+tp.cls+'">'+l.type+'</span></td>'
       +'<td><strong>'+esc(l.ref)+'</strong></td>'
       +'<td>'+(s?esc(s.nom):'?')+'</td>'
-      +'<td style="color:var(--bl);font-size:.7rem">'+(tf?esc(tf.nom):'—')+'</td>'
+      +'<td style="color:var(--bl);font-size:.7rem">'+(tf?esc(tf.nom):'-')+'</td>'
       +'<td style="text-align:right">'+total+'</td>'
       +'<td style="font-size:.67rem;color:var(--mu)">'+numsStr+'</td>'
-      +'<td>'+(l.dest?esc(l.dest):'—')+'</td>'
+      +'<td>'+(l.dest?esc(l.dest):'-')+'</td>'
       +'<td>'+tTag+'</td>'
       +'<td>'+uTag+'</td>'
       +'<td style="display:flex;gap:4px">'
@@ -3593,7 +3593,7 @@ function rfTim(){
   } else {
     ls.innerHTML='<option value="">-- Choisir un lot --</option>'+elig.map(l=>{
       const tf=db.titresF.find(x=>x.id===l.tfid);
-      return `<option value="${l.id}">${esc(l.ref)} (${l.type})${tf?' — '+esc(tf.nom):''} — ${l.qte} LV</option>`;
+      return `<option value="${l.id}">${esc(l.ref)} (${l.type})${tf?' - '+esc(tf.nom):''} - ${l.qte} LV</option>`;
     }).join('');
     if(v)ls.value=v;
   }
@@ -3631,7 +3631,7 @@ function addTim(){
   const lotTim=db.lots.find(l=>l.id===lid);
   const tfidTim=lotTim?lotTim.tfid:'';
   const soldeTim=getSoldeTF(sid,tfidTim);
-  if(soldeTim<mnt)return mg('msg_t','⚠ Fonds insuffisants — Solde : '+fmt(soldeTim)+' · Montant timbres : '+fmt(mnt)+'.','err');
+  if(soldeTim<mnt)return mg('msg_t','⚠ Fonds insuffisants - Solde : '+fmt(soldeTim)+' · Montant timbres : '+fmt(mnt)+'.','err');
   // Vérifier unicité N° quittance timbre
   if(db.timbres.find(t=>t.num===num))return mg('msg_t','Ce N° de quittance timbre est déjà enregistré.','err');
   // Vérifier que le lot n'est pas déjà timbré
@@ -3645,7 +3645,7 @@ function addTim(){
   db.decs.push({id:uid(),sid,type:'Timbre',mnt,ref:num,date,
     obs:'Timbres lot '+lot.ref+' ('+qte+' LV × '+fmt(PXT)+')',auto:true});
   save();
-  logAction('Timbre','Timbre lot '+lot.ref+' — '+num+' — '+lot.qte+' LV',num);
+  logAction('Timbre','Timbre lot '+lot.ref+' - '+num+' - '+lot.qte+' LV',num);
   renderAll();
   genericPJReset('tt');
   ['t_n','t_o'].forEach(i=>document.getElementById(i).value='');
@@ -3654,7 +3654,7 @@ function addTim(){
   document.getElementById('t_q').readOnly=false;
   document.getElementById('t_m').value='';
   document.getElementById('tim_inf').innerHTML='';
-  mg('msg_t','✓ Lot '+lot.ref+' timbré — '+qte+' LV — '+fmt(mnt)+' déduit de la caisse.','ok');
+  mg('msg_t','✓ Lot '+lot.ref+' timbré - '+qte+' LV - '+fmt(mnt)+' déduit de la caisse.','ok');
 }
 function rTimbres(){
   const te=document.getElementById('tEtat');
@@ -3675,13 +3675,13 @@ function rTimbres(){
         +'<td><span class="tag '+TI[l.type].cls+'">'+l.type+'</span></td>'
         +'<td><strong>'+esc(l.ref)+'</strong></td>'
         +'<td>'+(s?esc(s.nom):'?')+'</td>'
-        +'<td style="color:var(--bl);font-size:.7rem">'+(tf?esc(tf.nom):'—')+'</td>'
+        +'<td style="color:var(--bl);font-size:.7rem">'+(tf?esc(tf.nom):'-')+'</td>'
         +'<td style="text-align:right">'+l.qte+'</td>'
         +'<td style="text-align:center">'+(estTibre
           ?'<span class="tag g">✓ Timbré</span>'
           :'<span class="tag o">Non timbré</span>')+'</td>'
-        +'<td style="font-size:.68rem;color:var(--mu)">'+(numQuit||'—')+'</td>'
-        +'<td style="text-align:right;color:var(--pu)"><strong>'+(mntTim>0?fmt(mntTim):'—')+'</strong></td>'
+        +'<td style="font-size:.68rem;color:var(--mu)">'+(numQuit||'-')+'</td>'
+        +'<td style="text-align:right;color:var(--pu)"><strong>'+(mntTim>0?fmt(mntTim):'-')+'</strong></td>'
         +'<td>'+(estTibre?'<button class="btn sm sec" onclick="delTim_lot(\''+l.id+'\')">✕</button>':'')+'</td>'
         +'</tr>';
     }).join('');
@@ -3697,7 +3697,7 @@ function rTimbres(){
   }
   const t=document.getElementById('tList');
   if(!db.timbres.length){t.innerHTML='<div class="empty">Aucune quittance de timbres.</div>';return;}
-  /* [FIX v4.8] Pagination timbres — 50 par page */
+  /* [FIX v4.8] Pagination timbres - 50 par page */
   if(!rTimbres._page) rTimbres._page=1;
   var _TIM_PS=50;
   var _allTims=[...db.timbres].reverse();
@@ -3712,7 +3712,7 @@ function rTimbres(){
       +'<td>'+fd(ti.date)+'</td>'
       +'<td><strong>'+esc(ti.num)+'</strong></td>'
       +'<td>'+(s?esc(s.nom):'?')+'</td>'
-      +'<td style="color:var(--mu);font-size:.7rem">'+(lot?esc(lot.ref)+' ('+lot.type+')':'—')+'</td>'
+      +'<td style="color:var(--mu);font-size:.7rem">'+(lot?esc(lot.ref)+' ('+lot.type+')':'-')+'</td>'
       +'<td style="text-align:right">'+ti.qte+'</td>'
       +'<td style="text-align:right"><strong style="color:var(--pu)">'+fmt(ti.mnt)+'</strong></td>'
       +'<td>'+numsStr+'</td>'
@@ -3779,7 +3779,7 @@ function rfEncMontant(){
     inf.style.display='block';
     inf.style.background=sol>=0?'rgba(46,204,138,.1)':'rgba(224,90,90,.1)';
     inf.style.color=sol>=0?'var(--gr)':'var(--re)';
-    inf.innerHTML='💰 Solde caisse'+(tf?' — '+esc(tf.nom):' (toutes sociétés)')+' : <strong>'+fmt(sol)+'</strong>';
+    inf.innerHTML='💰 Solde caisse'+(tf?' - '+esc(tf.nom):' (toutes sociétés)')+' : <strong>'+fmt(sol)+'</strong>';
   }
 }
 function addEnc(){
@@ -3801,7 +3801,7 @@ function addEnc(){
   ['e_q','e_m','e_r','e_o'].forEach(i=>{const e=document.getElementById(i);if(e)e.value='';});
   rfEncMontant();
   const tf=tfid?db.titresF.find(t=>t.id===tfid):null;
-  mg('msg_e',`Encaissement ${nat}${qte?' — '+qte+' doc(s)':''} — ${fmt(mnt)} enregistré`+(grp?' pour groupe '+grp:tf?' pour '+tf.nom:'')+'.','ok');
+  mg('msg_e',`Encaissement ${nat}${qte?' - '+qte+' doc(s)':''} - ${fmt(mnt)} enregistré`+(grp?' pour groupe '+grp:tf?' pour '+tf.nom:'')+'.','ok');
 }
 
 function rfDecTitres(){
@@ -3837,7 +3837,7 @@ function rfDecSolde(){
     const ok=apres>=0;
     inf.style.background=ok?'rgba(46,204,138,.1)':'rgba(224,90,90,.1)';
     inf.style.color=ok?'var(--gr)':'var(--re)';
-    inf.innerHTML='💰 Solde'+(tf?' — '+esc(tf.nom):'')+' : <strong>'+fmt(sol)+'</strong>'
+    inf.innerHTML='💰 Solde'+(tf?' - '+esc(tf.nom):'')+' : <strong>'+fmt(sol)+'</strong>'
       +(mnt>0?' → Après prêt : <strong>'+fmt(apres)+'</strong>'+(ok?' ✓':' ⚠ Fonds insuffisants'):'');
   }
 }
@@ -3864,7 +3864,7 @@ function addDec(){
   save();renderAll();
   ['c_ben','c_m','c_r','c_o'].forEach(i=>{const e=document.getElementById(i);if(e)e.value='';});
   rfDecSolde();
-  mg('msg_c',`Décaissement — ${fmt(mnt)} enregistré`+(grp?' — Groupe: '+grp:'')+'.','ok');
+  mg('msg_c',`Décaissement - ${fmt(mnt)} enregistré`+(grp?' - Groupe: '+grp:'')+'.','ok');
 }
 
 function rCaisse(){
@@ -3948,11 +3948,11 @@ function rCaisse(){
         const valE=em(s.id,tp)*PX;
         const ecart=dec-valE;
         rowTot+=dec;
-        html+=`<td style="text-align:right;border-left:1px solid var(--bor)">${dec?fmt(dec):'—'}</td>
-          <td style="text-align:right">${valE?fmt(valE):'—'}</td>
+        html+=`<td style="text-align:right;border-left:1px solid var(--bor)">${dec?fmt(dec):'-'}</td>
+          <td style="text-align:right">${valE?fmt(valE):'-'}</td>
           <td style="text-align:right"><span class="tag ${ecart>=0?'g':'r'}" style="font-size:.59rem">${fmt(ecart)}</span></td>`;
       });
-      html+=`<td style="text-align:right;border-left:1px solid var(--bor)">${dT?fmt(dT):'—'}</td>
+      html+=`<td style="text-align:right;border-left:1px solid var(--bor)">${dT?fmt(dT):'-'}</td>
         <td style="text-align:right"><strong>${fmt(rowTot+dT)}</strong></td></tr>`;
     });
     html+=`<tr style="font-weight:700;background:var(--sur2)"><td>TOTAL</td>`;
@@ -3975,7 +3975,7 @@ function rCaisse(){
   if(el){
   if(!db.encs.length){el.innerHTML='<div class="empty">Aucun encaissement.</div>';}
   else{
-    /* [FIX v4.8] Pagination encaissements — 50 par page */
+    /* [FIX v4.8] Pagination encaissements - 50 par page */
     if(!rCaisse._encPage) rCaisse._encPage=1;
     var _ENC_PS=50;
     const tcE={Dotation:'g',Versement:'b',Transfert:'t',Autre:'a'};
@@ -3987,10 +3987,10 @@ function rCaisse(){
       const tf=db.titresF.find(x=>x.id===e.tfid);
       return `<tr>
         <td>${fd(e.date)}</td><td><strong>${esc(e.ref)}</strong></td><td>${s?esc(s.nom):'?'}</td>
-        <td style="font-size:.7rem;color:var(--bl)">${tf?tf.nom:'—'}</td>
+        <td style="font-size:.7rem;color:var(--bl)">${tf?tf.nom:'-'}</td>
         <td><span class="tag ${tcE[e.type]||'a'}">${_catBadge(e.cat||"")}${e.type}</span></td>
         <td style="text-align:right"><strong style="color:var(--gr)">${fmt(e.mnt)}</strong></td>
-        <td style="color:var(--mu)">${e.obs?esc(e.obs):'—'}</td>
+        <td style="color:var(--mu)">${e.obs?esc(e.obs):'-'}</td>
         <td style="white-space:nowrap">
           <button class="btn sm sec" onclick="ouvrirEditCaisse('enc','${e.id}')" title="Modifier">✏</button>
           <button class="btn sm sec" onclick="delEnc('${e.id}')" title="Supprimer" style="color:var(--re)">✕</button>
@@ -4010,7 +4010,7 @@ function rCaisse(){
   const t=document.getElementById('cList');
   if(!t)return;
   if(!db.decs.length){t.innerHTML='<div class="empty">Aucun décaissement.</div>';return;}
-    /* [FIX v4.8] Pagination décaissements — 50 par page */
+    /* [FIX v4.8] Pagination décaissements - 50 par page */
     if(!rCaisse._decPage) rCaisse._decPage=1;
     var _DEC_PS=50;
   const tc={LVG:'a',LVD:'b',DF10:'t',Timbre:'p',Pret:'o'};
@@ -4022,11 +4022,11 @@ function rCaisse(){
     const tf=db.titresF.find(x=>x.id===d.tfid);
     return `<tr>
       <td>${fd(d.date)}</td><td><strong>${esc(d.ref)}</strong></td><td>${s?esc(s.nom):'?'}</td>
-      <td style="font-size:.7rem;color:var(--bl)">${tf?tf.nom:'—'}</td>
+      <td style="font-size:.7rem;color:var(--bl)">${tf?tf.nom:'-'}</td>
       <td><span class="tag ${tc[d.type]||'a'}">${_catBadge(d.cat||"")}${d.type}</span></td>
       <td style="text-align:right"><strong style="color:var(--re)">${fmt(d.mnt)}</strong></td>
       <td>${d.auto?'<span class="tag p" style="font-size:.59rem">Auto</span>':'<span style="font-size:.59rem;color:var(--mu)">Manuel</span>'}</td>
-      <td style="color:var(--mu)">${d.obs?esc(d.obs):'—'}</td>
+      <td style="color:var(--mu)">${d.obs?esc(d.obs):'-'}</td>
       <td style="white-space:nowrap">
         <button class="btn sm sec" onclick="ouvrirEditCaisse('dec','${d.id}')" title="Modifier">✏</button>
         <button class="btn sm sec" onclick="delDec('${d.id}')" title="Supprimer" style="color:var(--re)">✕</button>
@@ -4049,7 +4049,7 @@ function ouvrirTimVal(id){
   const l=db.lots.find(x=>x.id===id),s=db.socs.find(x=>x.id===l.sid);
   const restNums=numsRestantsDuLot(id);
   const deja=numsTimbresDuLot(id);
-  document.getElementById('tvTitle').innerHTML=`Timbres — <span style="color:var(--mu);font-weight:400">${esc(l.ref)}</span>`;
+  document.getElementById('tvTitle').innerHTML=`Timbres - <span style="color:var(--mu);font-weight:400">${esc(l.ref)}</span>`;
   document.getElementById('tvInfo').innerHTML=
     `<strong>${s?esc(s.nom):'?'}</strong> · <span class="tag ${TI[l.type].cls}">${l.type}</span> · ${l.qte} LV au total · `+
     `<strong style="color:var(--pu)">${deja.length}</strong> déjà timbrées · `+
@@ -4088,7 +4088,7 @@ function tvUpdateMnt(){
   document.getElementById('tv_m').value=q*PXT;
   document.getElementById('tv_sel_info').innerHTML=
     q>0
-      ?`<strong style="color:var(--pu)">${q}</strong> LV sélectionnées · Montant : <strong style="color:var(--pu)">${fmt(q*PXT)}</strong> — modifiable si besoin`
+      ?`<strong style="color:var(--pu)">${q}</strong> LV sélectionnées · Montant : <strong style="color:var(--pu)">${fmt(q*PXT)}</strong> - modifiable si besoin`
       :`<span style="color:var(--mu)">Sélectionnez les LV à timbrer ci-dessus</span>`;
 }
 
@@ -4356,8 +4356,8 @@ function rDash(){
         const cells=['LVG','LVD','DF10'].map(tp=>{
           const a=ach(s.id,tp),e=em(s.id,tp),sk=a-e;
           const timS=TI[tp].timbre?db.timbres.filter(t=>{const l=db.lots.find(x=>x.id===t.lotId);return l&&l.type===tp&&l.sid===s.id;}).reduce((a,t)=>a+t.qte,0):null;
-          return '<td style="text-align:right;font-weight:700">'+(a||'—')+'</td>'+
-            '<td style="text-align:right;font-weight:700">'+(e||'—')+'</td>'+
+          return '<td style="text-align:right;font-weight:700">'+(a||'-')+'</td>'+
+            '<td style="text-align:right;font-weight:700">'+(e||'-')+'</td>'+
             '<td style="text-align:right"><span class="tag '+(sk>0?TI[tp].cls:'r')+'">'+sk+'</span></td>'+
             (TI[tp].timbre?'<td style="text-align:right"><span class="tag p">'+timS+'</span></td>':'');
         }).join('');
@@ -4370,12 +4370,12 @@ function rDash(){
             const a=achTF(tf.id,tp),e=emTF(tf.id,tp),sk=stkTF(tf.id,tp);
             const stkG=stk(s.id,tp);
             const timS=TI[tp].timbre?db.timbres.filter(t=>{const l=db.lots.find(x=>x.id===t.lotId);return l&&l.type===tp&&l.tfid===tf.id;}).reduce((a,t)=>a+t.qte,0):null;
-            return '<td style="text-align:right;font-size:.72rem">'+(a||'—')+'</td>'+
-              '<td style="text-align:right;font-size:.72rem">'+(e||'—')+'</td>'+
+            return '<td style="text-align:right;font-size:.72rem">'+(a||'-')+'</td>'+
+              '<td style="text-align:right;font-size:.72rem">'+(e||'-')+'</td>'+
               '<td style="text-align:right">'+
               (a?'<span class="tag '+(sk>0?TI[tp].cls:'r')+'" style="font-size:.62rem">'+sk+'</span>'+
                 (sk<=0&&stkG>0?'<span style="font-size:.58rem;color:var(--or);display:block">⚡'+stkG+' dispo</span>':'')
-                :'<span style="color:var(--bor)">—</span>')+
+                :'<span style="color:var(--bor)">-</span>')+
               '</td>'+
               (TI[tp].timbre?'<td style="text-align:right"><span class="tag p" style="font-size:.62rem">'+timS+'</span></td>':'');
           }).join('');
@@ -4427,7 +4427,7 @@ function rDash(){
               <td><strong>${esc(l.ref)}</strong></td>
               <td><span class="tag ${ti.cls}">${l.type}</span></td>
               <td>${s?esc(s.nom):'?'}</td>
-              <td style="color:var(--bl);font-size:.7rem">${tf?tf.nom:'—'}</td>
+              <td style="color:var(--bl);font-size:.7rem">${tf?tf.nom:'-'}</td>
               <td style="text-align:right">${l.total}</td>
               <td style="text-align:right;color:var(--gr)">${l.util}</td>
               <td style="text-align:right"><strong style="color:var(--or)">${l.reste}</strong></td>
@@ -4459,7 +4459,7 @@ function rDash(){
           '<td><span class="tag '+TI[l.type].cls+'">'+l.type+'</span></td>'+
           '<td><strong>'+esc(l.ref)+'</strong></td>'+
           '<td>'+(s?esc(s.nom):'?')+'</td>'+
-          '<td style="color:var(--bl);font-size:.7rem">'+(tf?esc(tf.nom):'—')+'</td>'+
+          '<td style="color:var(--bl);font-size:.7rem">'+(tf?esc(tf.nom):'-')+'</td>'+
           '<td style="text-align:right">'+l.qte+'</td>'+
           '<td style="text-align:right"><span class="tag p">'+tim+'</span></td>'+
           '<td style="text-align:right"><span class="tag '+(rest>0?'o':'g')+'">'+rest+'</span></td>'+
@@ -4513,7 +4513,7 @@ function ouvrirUtilModal(lid){
   const l=db.lots.find(x=>x.id===lid);
   const s=db.socs.find(x=>x.id===l.sid);
   const tf=db.titresF.find(x=>x.id===l.tfid);
-  document.getElementById('util_title').innerHTML='Marquer comme utilisé — <span style="color:var(--mu);font-weight:400">'+esc(l.ref)+'</span>';
+  document.getElementById('util_title').innerHTML='Marquer comme utilisé - <span style="color:var(--mu);font-weight:400">'+esc(l.ref)+'</span>';
   document.getElementById('util_info').innerHTML=
     '<strong>'+(s?esc(s.nom):'?')+'</strong>'+(tf?' · <span class="tag b">'+esc(tf.nom)+'</span>':'')+
     ' · <span class="tag '+(TI[l.type]||TI.LVG).cls+'">'+l.type+'</span>'+
@@ -4525,7 +4525,7 @@ function ouvrirUtilModal(lid){
   // Numéros disponibles (non encore utilisés)
   const restants=numsRestantsUtilLot(lid);
   const utilises=new Set(numsUtilisesLot(lid));
-  document.getElementById('util_title').innerHTML='Envoi / Utilisation — <span style="color:var(--mu);font-weight:400">'+esc(l.ref)+'</span>';
+  document.getElementById('util_title').innerHTML='Envoi / Utilisation - <span style="color:var(--mu);font-weight:400">'+esc(l.ref)+'</span>';
   const numEl=document.getElementById('util_nums');
   if(!restants.length){
     numEl.innerHTML='<div style="color:var(--gr);font-size:.72rem;text-align:center;padding:12px">✓ Tous les numéros de ce lot ont déjà été utilisés.</div>';
@@ -4551,7 +4551,7 @@ function utilMajInfo(){
   const checks=[...document.querySelectorAll('input[name="util_n"]:checked')];
   const n=checks.length;
   document.getElementById('util_sel_info').innerHTML=
-    n===0?'<span style="color:var(--mu)">Aucun numéro sélectionné — envoi sans utilisation immédiate</span>'
+    n===0?'<span style="color:var(--mu)">Aucun numéro sélectionné - envoi sans utilisation immédiate</span>'
     :'<span style="color:var(--gr)">'+n+' numéro'+(n>1?'s':'')+' marqué'+(n>1?'s':'')+' comme utilisé'+(n>1?'s':'')+'</span>';
 }
 
@@ -4574,7 +4574,7 @@ function marquerUtilise(){
   const newUtil={id:uid(),lotId:utilLotId,nums:sel,date,dest,obs};
   db.utilisations.push(newUtil);
   const _uLot=db.lots.find(l=>l.id===utilLotId);
-  logAction('Utilisation','Envoi chantier : '+(_uLot?_uLot.ref:'?')+' — '+sel.length+' LV utilisée(s)',dest||'');
+  logAction('Utilisation','Envoi chantier : '+(_uLot?_uLot.ref:'?')+' - '+sel.length+' LV utilisée(s)',dest||'');
   save();renderAll();
   document.getElementById('utilModal').classList.remove('open');
 }
@@ -4686,7 +4686,7 @@ function voirNums(tfid,tp,sid){
       var u=isUtil?(db.utilisations||[]).filter(function(u){return u.nums&&u.nums.includes(n);})[0]:null;
       return '<span class="nc" style="'
         +(isUtil?'border-color:var(--gr);color:var(--gr);':isTimb?'border-color:var(--pu);color:var(--pu);':'')
-        +'" title="'+(isUtil?'Utilisé le '+fd(u?u.date:'')+(u&&u.dest?' — '+u.dest:''):'Non utilisé')+'">'
+        +'" title="'+(isUtil?'Utilisé le '+fd(u?u.date:'')+(u&&u.dest?' - '+u.dest:''):'Non utilisé')+'">'
         +n+(isUtil?' ✓':isTimb?' ◈':'')+'</span>';
     }).join('');
   });
@@ -4694,7 +4694,7 @@ function voirNums(tfid,tp,sid){
   html+='<div style="margin-top:12px;font-size:.62rem;color:var(--mu)">'
     +'<span class="nc" style="border-color:var(--gr);color:var(--gr)">✓</span> Utilisé &nbsp;&nbsp;'
     +'<span class="nc" style="border-color:var(--pu);color:var(--pu)">◈</span> Timbré &nbsp;&nbsp;'
-    +'<span class="nc">—</span> Non utilisé</div>';
+    +'<span class="nc">-</span> Non utilisé</div>';
   document.getElementById('nmB').innerHTML=html;
   document.getElementById('numModal').classList.add('open');
 }
@@ -4789,7 +4789,7 @@ function majEditSolde(){
   inf.style.display='block';
   inf.style.background=soldeApres>=0?'rgba(46,204,138,.1)':'rgba(224,90,90,.1)';
   inf.style.color=soldeApres>=0?'var(--gr)':'var(--re)';
-  inf.innerHTML='💰 Solde après modification'+(tf?' — '+esc(tf.nom):'')+' : <strong>'+fmt(soldeApres)+'</strong>'+(soldeApres<0?' ⚠ Déficit':'');
+  inf.innerHTML='💰 Solde après modification'+(tf?' - '+esc(tf.nom):'')+' : <strong>'+fmt(soldeApres)+'</strong>'+(soldeApres<0?' ⚠ Déficit':'');
 }
 
 function sauvegarderEditCaisse(){
@@ -4823,7 +4823,7 @@ function sauvegarderEditCaisse(){
     const soldeBase=encs.reduce((a,e)=>a+e.mnt,0)-decs.reduce((a,d)=>a+d.mnt,0);
     if(soldeBase<mnt){
       const tf=tfid?db.titresF.find(t=>t.id===tfid):null;
-      msgEl.innerHTML='<div class="alert err">⚠ Fonds insuffisants'+(tf?' pour '+esc(tf.nom):'')+' — Solde disponible : '+fmt(soldeBase)+' · Montant demandé : '+fmt(mnt)+'.</div>';
+      msgEl.innerHTML='<div class="alert err">⚠ Fonds insuffisants'+(tf?' pour '+esc(tf.nom):'')+' - Solde disponible : '+fmt(soldeBase)+' · Montant demandé : '+fmt(mnt)+'.</div>';
       return;
     }
     db.decs[idx]={...db.decs[idx],sid,tfid,type:nat,qte,mnt,ref,date,obs};
@@ -4831,7 +4831,7 @@ function sauvegarderEditCaisse(){
 
   save();renderAll();
   document.getElementById('editCaisseModal').classList.remove('open');
-  logAction('Caisse','Modification '+(mode==='enc'?'encaissement':'décaissement')+' — '+ref,'Edit');
+  logAction('Caisse','Modification '+(mode==='enc'?'encaissement':'décaissement')+' - '+ref,'Edit');
 }
 
 function delEnc(id){
@@ -5083,7 +5083,7 @@ function executerArchivage(){
     utilisations:[],
   };
   save();
-  logAction('Archive','Archivage année '+annee+' — Remise à zéro','Archive '+annee);
+  logAction('Archive','Archivage année '+annee+' - Remise à zéro','Archive '+annee);
 
   document.getElementById('archiveModal').classList.remove('open');
   renderAll();
@@ -5238,7 +5238,7 @@ function rJournal(){
       return `<tr><td style="font-size:.65rem;color:var(--mu)">${ds}</td><td><strong>${esc(e.user)}</strong></td>
         <td><span class="tag ${cls}">${icon} ${_catBadge(e.cat||"")}${e.type}</span></td>
         <td style="font-size:.72rem">${esc(e.description)}</td>
-        <td style="font-size:.65rem;color:var(--mu)">${e.ref?esc(e.ref):'—'}</td></tr>`;
+        <td style="font-size:.65rem;color:var(--mu)">${e.ref?esc(e.ref):'-'}</td></tr>`;
     }).join('')}
     </tbody></table></div>
     <div style="font-size:.65rem;color:var(--mu);margin-top:8px">${journal.length} action(s) enregistrée(s)</div>`;
@@ -5263,7 +5263,7 @@ function rechercherLV(){
       const tf=db.titresF.find(x=>x.id===l.tfid);
       const isUtil=(db.utilisations||[]).some(u=>u.nums&&u.nums.includes(q));
       const isTimbr=db.timbres.some(t=>t.lotId===l.id);
-      const utilInfo=(db.utilisations||[]).filter(u=>u.nums&&u.nums.includes(q)).map(u=>fd(u.date)+(u.dest?' — '+u.dest:'')).join(', ');
+      const utilInfo=(db.utilisations||[]).filter(u=>u.nums&&u.nums.includes(q)).map(u=>fd(u.date)+(u.dest?' - '+u.dest:'')).join(', ');
       results.push({lot:l,soc:s,tf,isUtil,isTimbr,utilInfo});
     }
   });
@@ -5279,9 +5279,9 @@ function rechercherLV(){
       <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px;font-size:.72rem">
         <div><span style="color:var(--mu)">Lot :</span> <strong>${esc(r.lot.ref)}</strong></div>
         <div><span style="color:var(--mu)">Société :</span> ${r.soc?esc(r.soc.nom):'?'}</div>
-        <div><span style="color:var(--mu)">Titre :</span> ${r.tf?esc(r.tf.nom):'—'}</div>
+        <div><span style="color:var(--mu)">Titre :</span> ${r.tf?esc(r.tf.nom):'-'}</div>
         <div><span style="color:var(--mu)">Émis le :</span> ${fd(r.lot.date)}</div>
-        <div><span style="color:var(--mu)">Destination :</span> ${r.lot.dest?esc(r.lot.dest):'—'}</div>
+        <div><span style="color:var(--mu)">Destination :</span> ${r.lot.dest?esc(r.lot.dest):'-'}</div>
         ${r.isUtil?`<div style="color:var(--gr)">Utilisé le : ${r.utilInfo}</div>`:''}
       </div>
     </div>`).join('');
@@ -5301,7 +5301,7 @@ function rechercherLot(){
         <span class="tag ${{LVG:'a',LVD:'b',DF10:'t'}[l.type]||'a'}">${l.type}</span>
         <span style="color:var(--mu)">${fd(l.date)}</span>
       </div>
-      <div style="color:var(--mu)">Société : <span style="color:var(--tx)">${s?esc(s.nom):'?'}</span> · Titre : <span style="color:var(--bl)">${tf?esc(tf.nom):'—'}</span> · ${l.qte} LV · Utilisées : ${util}/${l.qte}</div>
+      <div style="color:var(--mu)">Société : <span style="color:var(--tx)">${s?esc(s.nom):'?'}</span> · Titre : <span style="color:var(--bl)">${tf?esc(tf.nom):'-'}</span> · ${l.qte} LV · Utilisées : ${util}/${l.qte}</div>
       <div style="margin-top:6px;line-height:2">${(l.nums||[]).map(n=>`<span class="nc">${n}</span>`).join('')}</div>
     </div>`;
   }).join('');
@@ -5331,10 +5331,10 @@ function imprimerQuits(){
   _printTable(title,quits,['Date','Type','N° Quittance','Société','Titre','Qté','Montant LV','Timbres','Total'],
     q=>{
       const s=db.socs.find(x=>x.id===q.sid)?.nom||'?';
-      const tf=db.titresF.find(x=>x.id===q.tfid)?.nom||'—';
+      const tf=db.titresF.find(x=>x.id===q.tfid)?.nom||'-';
       return [fd(q.date),q.type,q.num,s,tf,q.qte,
         Number(q.montant).toLocaleString('fr-FR')+' F',
-        q.timbre>0?Number(q.timbre).toLocaleString('fr-FR')+' F':'—',
+        q.timbre>0?Number(q.timbre).toLocaleString('fr-FR')+' F':'-',
         Number(q.total||q.montant).toLocaleString('fr-FR')+' F'];
     });
 }
@@ -5344,8 +5344,8 @@ function imprimerLots(){
     ['Date','Type','Réf. Lot','Société','Titre','Qté','Numéros','Destination'],
     l=>{
       const s=db.socs.find(x=>x.id===l.sid)?.nom||'?';
-      const tf=db.titresF.find(x=>x.id===l.tfid)?.nom||'—';
-      return [fd(l.date),l.type,l.ref,s,tf,l.qte,(l.nums||[]).join(' · '),l.dest||'—'];
+      const tf=db.titresF.find(x=>x.id===l.tfid)?.nom||'-';
+      return [fd(l.date),l.type,l.ref,s,tf,l.qte,(l.nums||[]).join(' · '),l.dest||'-'];
     });
 }
 function _printTable(title,rows,headers,rowFn){
@@ -5375,11 +5375,11 @@ function _printTable(title,rows,headers,rowFn){
 #print_header { display: none; }
 
 </style></head>
-  <body><h1>LVTrack Pro — ${title}</h1>
+  <body><h1>LVTrack Pro - ${title}</h1>
   <p>Exporté le ${new Date().toLocaleString('fr-FR')} · ${rows.length} enregistrement(s)</p>
   <table><thead><tr>${headers.map(h=>`<th>${h}</th>`).join('')}</tr></thead>
   <tbody>${rows.map(r=>`<tr>${rowFn(r).map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table>
-  <div class="footer">LVTrack Pro — Gestion des Documents Sécurisés</div>
+  <div class="footer">LVTrack Pro - Gestion des Documents Sécurisés</div>
   <script>window.onload=()=>setTimeout(()=>window.print(),400)<\/script></body></html>`;
   const w=window.open('','_blank','width=1100,height=750');
   if(w){w.document.write(html);w.document.close();}
@@ -5507,14 +5507,14 @@ function _doubleBarChart(labels,enc,dec){
 //  FONCTIONS HELPERS (compatibilité Export Excel)
 // ══════════════════════════════════════════════════════════════
 function fmtDate(d){
-  if(!d)return '—';
+  if(!d)return '-';
   try{const p=d.split('-');if(p.length===3)return p[2]+'/'+p[1]+'/'+p[0];}catch(e){}
   return d;
 }
 function getLot(id){ return db.lots.find(l=>l.id===id)||null; }
 function getPret(id){ return db.prets.find(p=>p.id===id)||null; }
 function getTitresF(sid){ return sid?db.titresF.filter(t=>t.sid===sid):db.titresF; }
-function getTFName(tfid){ const tf=db.titresF.find(t=>t.id===tfid); return tf?tf.nom:'—'; }
+function getTFName(tfid){ const tf=db.titresF.find(t=>t.id===tfid); return tf?tf.nom:'-'; }
 function getPrets(sid){ return sid?db.prets.filter(p=>p.sid===sid):db.prets; }
 function getSolde(sid){
   const enc=db.encs.filter(e=>e.sid===sid).reduce((a,e)=>a+e.mnt,0);
@@ -5544,7 +5544,7 @@ function getTotalDec(sid){ return db.decs.filter(d=>d.sid===sid).reduce((a,d)=>a
 function getTotalTimbresLot(lotId){ return db.timbres.filter(t=>t.lotId===lotId).reduce((a,t)=>a+t.qte,0); }
 
 // ══════════════════════════════════════════════════════════════
-//  SYNCHRONISATION JSON — EXPORT / IMPORT LOCAL
+//  SYNCHRONISATION JSON - EXPORT / IMPORT LOCAL
 // ══════════════════════════════════════════════════════════════
 
 function ouvrirSync(){ exportJSON(); }
@@ -5557,27 +5557,27 @@ function exportExcel(section){
   const wb=XLSX.utils.book_new();
   if(!section||section==='quits'){
     const d=db.quits.map(q=>{const s=db.socs.find(x=>x.id===q.sid);const tf=db.titresF.find(x=>x.id===q.tfid);
-      return{Date:q.date,Type:q.type,'N° Quittance':q.num,Société:s?s.nom:'?',Titre:tf?tf.nom:'—',Quantité:q.qte,'Montant LV':q.montant,'Total décaissé':q.total,Obs:q.obs||''};});
+      return{Date:q.date,Type:q.type,'N° Quittance':q.num,Société:s?s.nom:'?',Titre:tf?tf.nom:'-',Quantité:q.qte,'Montant LV':q.montant,'Total décaissé':q.total,Obs:q.obs||''};});
     XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(d),'Quittances');
   }
   if(!section||section==='lots'){
     const d=db.lots.map(l=>{const s=db.socs.find(x=>x.id===l.sid);const tf=db.titresF.find(x=>x.id===l.tfid);
-      return{Date:l.date,Type:l.type,Référence:l.ref,Société:s?s.nom:'?',Titre:tf?tf.nom:'—',Quantité:l.qte,Numéros:(l.nums||[]).join(', '),Destination:l.dest||''};});
+      return{Date:l.date,Type:l.type,Référence:l.ref,Société:s?s.nom:'?',Titre:tf?tf.nom:'-',Quantité:l.qte,Numéros:(l.nums||[]).join(', '),Destination:l.dest||''};});
     XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(d),'Lots');
   }
   if(!section||section==='timbres'){
     const d=db.timbres.map(t=>{const s=db.socs.find(x=>x.id===t.sid);const lot=db.lots.find(x=>x.id===t.lotId);
-      return{Date:t.date,'N° Quittance':t.num,Société:s?s.nom:'?',Lot:lot?lot.ref:'—','Nb timbres':t.qte,Montant:t.mnt,Numéros:(t.nums||[]).join(', ')};});
+      return{Date:t.date,'N° Quittance':t.num,Société:s?s.nom:'?',Lot:lot?lot.ref:'-','Nb timbres':t.qte,Montant:t.mnt,Numéros:(t.nums||[]).join(', ')};});
     XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(d),'Timbres');
   }
   if(!section||section==='encs'){
     const d=db.encs.map(e=>{const s=db.socs.find(x=>x.id===e.sid);const tf=db.titresF.find(x=>x.id===e.tfid);
-      return{Date:e.date,Référence:e.ref,Société:s?s.nom:'?',Titre:tf?tf.nom:'—',Type:e.type,Catégorie:e.cat||'',Montant:e.mnt,Obs:e.obs||''};});
+      return{Date:e.date,Référence:e.ref,Société:s?s.nom:'?',Titre:tf?tf.nom:'-',Type:e.type,Catégorie:e.cat||'',Montant:e.mnt,Obs:e.obs||''};});
     XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(d),'Encaissements');
   }
   if(!section||section==='decs'){
     const d=db.decs.map(d2=>{const s=db.socs.find(x=>x.id===d2.sid);const tf=db.titresF.find(x=>x.id===d2.tfid);
-      return{Date:d2.date,Référence:d2.ref,Société:s?s.nom:'?',Titre:tf?tf.nom:'—',Type:d2.type,Montant:d2.mnt,Auto:d2.auto?'Oui':'Non',Obs:d2.obs||''};});
+      return{Date:d2.date,Référence:d2.ref,Société:s?s.nom:'?',Titre:tf?tf.nom:'-',Type:d2.type,Montant:d2.mnt,Auto:d2.auto?'Oui':'Non',Obs:d2.obs||''};});
     XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(d),'Décaissements');
   }
   XLSX.writeFile(wb,'LVTrack_'+(section||'complet')+'_'+new Date().toISOString().slice(0,10)+'.xlsx');
@@ -5588,15 +5588,15 @@ function exportCSV(section){
   if(section==='quits'){
     headers=['Date','Type','N° Quittance','Société','Titre','Qté','Montant','Total','Obs'];
     rows=db.quits.map(q=>{const s=db.socs.find(x=>x.id===q.sid);const tf=db.titresF.find(x=>x.id===q.tfid);
-      return[q.date,q.type,q.num,s?s.nom:'?',tf?tf.nom:'—',q.qte,q.montant,q.total,q.obs||''];});
+      return[q.date,q.type,q.num,s?s.nom:'?',tf?tf.nom:'-',q.qte,q.montant,q.total,q.obs||''];});
   }else if(section==='lots'){
     headers=['Date','Type','Réf','Société','Titre','Qté','Numéros','Dest'];
     rows=db.lots.map(l=>{const s=db.socs.find(x=>x.id===l.sid);const tf=db.titresF.find(x=>x.id===l.tfid);
-      return[l.date,l.type,l.ref,s?s.nom:'?',tf?tf.nom:'—',l.qte,(l.nums||[]).join(' '),l.dest||''];});
+      return[l.date,l.type,l.ref,s?s.nom:'?',tf?tf.nom:'-',l.qte,(l.nums||[]).join(' '),l.dest||''];});
   }else if(section==='caisse'){
     headers=['Type','Date','Réf','Société','Titre','Montant','Obs'];
-    rows=[...db.encs.map(e=>['ENC',e.date,e.ref,(db.socs.find(x=>x.id===e.sid)||{}).nom||'?',(db.titresF.find(x=>x.id===e.tfid)||{}).nom||'—',e.mnt,e.obs||'']),
-          ...db.decs.map(d=>['DEC',d.date,d.ref,(db.socs.find(x=>x.id===d.sid)||{}).nom||'?',(db.titresF.find(x=>x.id===d.tfid)||{}).nom||'—',-d.mnt,d.obs||''])];
+    rows=[...db.encs.map(e=>['ENC',e.date,e.ref,(db.socs.find(x=>x.id===e.sid)||{}).nom||'?',(db.titresF.find(x=>x.id===e.tfid)||{}).nom||'-',e.mnt,e.obs||'']),
+          ...db.decs.map(d=>['DEC',d.date,d.ref,(db.socs.find(x=>x.id===d.sid)||{}).nom||'?',(db.titresF.find(x=>x.id===d.tfid)||{}).nom||'-',-d.mnt,d.obs||''])];
   }
   const csv=[headers.join(';'),...rows.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(';'))].join('\n');
   const blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'});
@@ -5611,7 +5611,7 @@ function imprimerPage(pageId,titre){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('print-target'));
   const page=document.getElementById(pageId);if(page)page.classList.add('print-target');
   const sub=document.getElementById('print_subtitle');
-  if(sub)sub.textContent=(titre||'')+' — '+new Date().toLocaleDateString('fr-FR');
+  if(sub)sub.textContent=(titre||'')+' - '+new Date().toLocaleDateString('fr-FR');
   window.print();
   setTimeout(()=>{if(page)page.classList.remove('print-target');},500);
 }
@@ -5657,14 +5657,14 @@ function validerEtImporter(jsonStr){
       utilisations: parsed.utilisations||[]
     };
     save(); renderAllFull();
-    alert('✓ Importé — ' + db.socs.length + ' société(s), ' + db.lots.length + ' lot(s).');
+    alert('✓ Importé - ' + db.socs.length + ' société(s), ' + db.lots.length + ' lot(s).');
     logAction('Import','Restauration depuis fichier JSON','Import');
   } catch(e) {
     alert('Erreur import : ' + e.message);
   }
 }
 
-/* [FIX v4.8] Stubs morts supprimés : majStatusCloud(), setSyncMeta() — jamais appelés */
+/* [FIX v4.8] Stubs morts supprimés : majStatusCloud(), setSyncMeta() - jamais appelés */
 
 
 function rDlLots(){
@@ -5675,7 +5675,7 @@ function rDlLots(){
   sel.innerHTML='<option value="">-- Tous les lots --</option>'
     +lots.map(l=>{
       const s=db.socs.find(x=>x.id===l.sid);
-      return `<option value="${l.id}">${esc(l.ref)} (${l.type}) — ${s?esc(s.nom):'?'} — ${l.qte} LV</option>`;
+      return `<option value="${l.id}">${esc(l.ref)} (${l.type}) - ${s?esc(s.nom):'?'} - ${l.qte} LV</option>`;
     }).join('');
 }
 
@@ -5731,9 +5731,9 @@ function genererHTMLLot(lot){
   <div class="info-grid">
     <div class="info-box"><div class="info-label">Référence lot</div><div class="info-value">${lot.ref}</div></div>
     <div class="info-box"><div class="info-label">Type</div><div class="info-value">${lot.type}</div></div>
-    <div class="info-box"><div class="info-label">Société</div><div class="info-value">${s?s.nom:'—'}</div></div>
-    <div class="info-box"><div class="info-label">Titre forestier</div><div class="info-value">${tf?tf.nom:'—'}</div></div>
-    <div class="info-box"><div class="info-label">Date d'émission</div><div class="info-value">${lot.date||'—'}</div></div>
+    <div class="info-box"><div class="info-label">Société</div><div class="info-value">${s?s.nom:'-'}</div></div>
+    <div class="info-box"><div class="info-label">Titre forestier</div><div class="info-value">${tf?tf.nom:'-'}</div></div>
+    <div class="info-box"><div class="info-label">Date d'émission</div><div class="info-value">${lot.date||'-'}</div></div>
     <div class="info-box"><div class="info-label">Statut timbre</div><div class="info-value"><span class="badge ${timbred?'badge-ok':'badge-no'}">${timbred?'✓ Timbré':'Non timbré'}</span></div></div>
   </div>
   <div style="font-size:11px;font-weight:700;margin-bottom:6px;color:#0B1E3E">
@@ -5743,7 +5743,7 @@ function genererHTMLLot(lot){
     <thead><tr><th>N° LV</th><th>Type</th><th>Réf. lot</th><th>Timbré</th></tr></thead>
     <tbody>${numRows}</tbody>
   </table>
-  <div class="footer">LVTrack Pro — ${s?s.nom:''} — Lot ${lot.ref} — ${lot.qte} LV ${lot.type}</div>
+  <div class="footer">LVTrack Pro - ${s?s.nom:''} - Lot ${lot.ref} - ${lot.qte} LV ${lot.type}</div>
   </body></html>`;
 }
 
@@ -5893,7 +5893,7 @@ initAuth();
 
 
 // ═══════════════════════════════════════════════════════════════
-// LVTrack v3 — Nouvelles fonctions
+// LVTrack v3 - Nouvelles fonctions
 // ═══════════════════════════════════════════════════════════════
 
 // ─── Helpers Groupes de titres ────────────────────────────────
@@ -6099,7 +6099,7 @@ function rGroupes(){
     html += `<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 12px;background:var(--bg);border:1px solid var(--bor);border-left:3px solid var(--te);border-radius:7px">
       <div>
         <strong style="font-size:.8rem">⬡ ${g.nom}</strong>
-        <span style="font-size:.6rem;color:var(--mu);margin-left:8px">${soc?soc.nom:'—'}</span>
+        <span style="font-size:.6rem;color:var(--mu);margin-left:8px">${soc?soc.nom:'-'}</span>
         <div style="font-size:.62rem;color:var(--bl);margin-top:3px">${g.titres.map(t=>t.nom).join(' · ')}</div>
       </div>
       <button class="btn sm sec" onclick="delGroupe('${g.sid}','${g.nom.replace(/'/g,"\'")}')" style="color:var(--re);flex-shrink:0" title="Supprimer ce groupe">✕</button>
@@ -6122,7 +6122,7 @@ function rfQuitGroupe(){
     const sid = document.getElementById('qq_s')?.value || '';
     const titres = getTitresByGroupe(grp, sid);
     const inf = document.getElementById('qq_inf');
-    if(inf) inf.innerHTML = `<span style="font-size:.65rem;color:var(--te)">⬡ Groupe <strong>${grp}</strong> — ${titres.length} titre(s) : ${titres.map(t=>t.nom).join(', ')}</span>`;
+    if(inf) inf.innerHTML = `<span style="font-size:.65rem;color:var(--te)">⬡ Groupe <strong>${grp}</strong> - ${titres.length} titre(s) : ${titres.map(t=>t.nom).join(', ')}</span>`;
   } else {
     tfSel.disabled = false;
     tfSel.style.opacity = '1';
@@ -6151,7 +6151,7 @@ function rfEncGroupe(){
       tfSel.closest('.fr')?.appendChild(newZone);
     }
     const z = document.getElementById('enc_grp_titres');
-    if(z) z.innerHTML = `<span style="color:var(--te);font-weight:700">⬡ Groupe ${grp}</span> — Titres associés : `
+    if(z) z.innerHTML = `<span style="color:var(--te);font-weight:700">⬡ Groupe ${grp}</span> - Titres associés : `
       + titres.map(t=>`<label style="display:inline-flex;align-items:center;gap:3px;margin-right:8px"><input type="checkbox" checked disabled style="accent-color:var(--te)"> <span>${t.nom}</span></label>`).join('');
   } else {
     tfSel.disabled = false;
@@ -6178,7 +6178,7 @@ function rfDecGroupe(){
       inf.style.display = 'block';
       inf.style.background = 'rgba(255,165,0,.1)';
       inf.style.color = 'var(--te)';
-      inf.innerHTML = `⬡ Groupe <strong>${grp}</strong> — ${titres.length} titre(s) : ${titres.map(t=>t.nom).join(', ')}`;
+      inf.innerHTML = `⬡ Groupe <strong>${grp}</strong> - ${titres.length} titre(s) : ${titres.map(t=>t.nom).join(', ')}`;
     }
   } else {
     tfSel.disabled = false;
@@ -6284,7 +6284,7 @@ function _renderPJCard(item, type){
   const soc = (db.socs||[]).find(s=>s.id===item.sid);
   const tf = (db.titresF||[]).find(t=>t.id===item.tfid);
   const refLabel = item.ref || item.num || (type+' #'+(item.id||'').substring(0,8));
-  const dateLabel = item.date ? new Date(item.date).toLocaleDateString('fr-FR') : '—';
+  const dateLabel = item.date ? new Date(item.date).toLocaleDateString('fr-FR') : '-';
 
   return pjs.map(pj=>{
     const name = pj.name || pj.nom || 'Document';
@@ -6297,7 +6297,7 @@ function _renderPJCard(item, type){
       '<div style="flex:1;min-width:200px">'+
       '<div style="font-weight:700;font-size:.78rem">📄 '+name+'</div>'+
       '<div style="font-size:.68rem;color:var(--mu);margin-top:3px">'+
-      (soc?soc.nom:'—')+(tf?' · '+tf.nom:'')+' · '+refLabel+' · '+dateLabel+
+      (soc?soc.nom:'-')+(tf?' · '+tf.nom:'')+' · '+refLabel+' · '+dateLabel+
       (size?' · '+_formatBytes(size):'')+
       '</div></div>'+
       (dataUrl?'<div style="display:flex;gap:5px"><a href="'+dataUrl+'" target="_blank" class="btn sm">👁 Voir</a><a href="'+dataUrl+'" download="'+name+'" class="btn sm sec">⬇</a></div>':'')+
@@ -6437,7 +6437,7 @@ function _catBadge(cat, sens){
 
 // ═══════════════════════════════════════════════════════════════
 // ═══════════════════════════════════════════════════════════════
-// Reste à acheter — Documents financés par encaissement mais
+// Reste à acheter - Documents financés par encaissement mais
 // pas encore achetés via quittance
 // ═══════════════════════════════════════════════════════════════
 function rDashResteAcheter(){
@@ -6550,7 +6550,7 @@ function rDashResteAcheter(){
 
     html += `<tr>
       <td>${s ? esc(s.nom) : '?'}</td>
-      <td style="font-size:.72rem;color:var(--bl)">${tf ? esc(tf.nom) : '<span style="color:var(--mu)">—</span>'}</td>
+      <td style="font-size:.72rem;color:var(--bl)">${tf ? esc(tf.nom) : '<span style="color:var(--mu)">-</span>'}</td>
       <td style="text-align:center"><span class="tag ${tagCls}">${r.type}</span></td>
       <td style="text-align:right;font-weight:700">${r.encQte.toLocaleString('fr-FR')}</td>
       <td style="text-align:right;color:var(--bl)">${r.quitQte.toLocaleString('fr-FR')}</td>
@@ -6636,7 +6636,7 @@ function rDashGroupes(){
     html += '<div class="card" style="padding:13px">'
       +'<div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px">'
         +'<div><strong style="font-size:.85rem">'+esc(g.nom)+'</strong>'
-          +'<div style="font-size:.62rem;color:var(--mu);margin-top:2px">'+(soc?esc(soc.nom):'—')+' · '+g.titres.length+' titre'+(g.titres.length>1?'s':'')+'</div>'
+          +'<div style="font-size:.62rem;color:var(--mu);margin-top:2px">'+(soc?esc(soc.nom):'-')+' · '+g.titres.length+' titre'+(g.titres.length>1?'s':'')+'</div>'
         +'</div>'
         +'<span style="background:var(--sur2);border:1px solid var(--bor);padding:4px 9px;border-radius:5px;font-size:.65rem;color:var(--tx)">Solde <strong style="color:'+colSolde+'">'+fmt(solde)+'</strong></span>'
       +'</div>'
