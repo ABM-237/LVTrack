@@ -6813,6 +6813,34 @@ if(_origRenderAll && !window._renderAllPatched){
   };
 })();
 </script>
+<script>
+/* LVTRACK-PROFILS-CLOUD-ONLY */
+(function(){
+  var CACHE = [];
+  try{ if(typeof AUTH_KEY!=='undefined' && AUTH_KEY) localStorage.removeItem(AUTH_KEY); }catch(e){}
+  window.getProfiles  = function(){ return CACHE.slice(); };
+  window.saveProfiles = function(p){ CACHE = Array.isArray(p) ? p.slice() : []; };
+  window.__profilsCache = function(){ return CACHE; };
+
+  function client(){
+    try{ if(typeof _getAuthClient==='function'){ var c=_getAuthClient(); if(c) return c; } }catch(e){}
+    try{ if(typeof _sb!=='undefined' && _sb) return _sb; }catch(e){}
+    return null;
+  }
+  try{
+    var c = client();
+    if(c && c.auth && typeof c.auth.onAuthStateChange==='function'){
+      c.auth.onAuthStateChange(function(){
+        if(typeof refreshProfilesFromCloud==='function'){
+          refreshProfilesFromCloud().then(function(ok){
+            if(ok && typeof rAdmin==='function'){ try{ rAdmin(); }catch(e){} }
+          });
+        }
+      });
+    }
+  }catch(e){ console.warn('[AUTH WATCH]', e); }
+})();
+</script>
 </body>
 </html>
 
