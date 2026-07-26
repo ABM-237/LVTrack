@@ -6743,6 +6743,76 @@ if(_origRenderAll && !window._renderAllPatched){
   setTimeout(function(){ refreshProfilesFromCloud(); }, 2500);
 })();
 </script>
+<script>
+/* LVTRACK-ADMIN-V2 */
+(function(){
+  function cli(){
+    try{ if(typeof _getAuthClient==='function'){ var c=_getAuthClient(); if(c) return c; } }catch(e){}
+    try{ if(typeof _sb!=='undefined' && _sb) return _sb; }catch(e){}
+    return null;
+  }
+  var PERMS_DEFAUT = {dash:"write",docs:"write",lots:"write",socs:"write",quits:"write",caisse:"write",journal:"write",timbres:"write",archives:"write",recherche:"write"};
+
+  function majLocal(name, fn){
+    try{
+      var arr = (typeof getProfiles==='function') ? getProfiles() : [];
+      var out = [];
+      for(var i=0;i<arr.length;i++){
+        var p = arr[i];
+        if(p && p.name===name){ var v = fn(p); if(v) out.push(v); }
+        else { out.push(p); }
+      }
+      if(typeof saveProfiles==='function') saveProfiles(out);
+    }catch(e){ console.warn('[LOCAL]', e); }
+  }
+
+  async function apresOperation(){
+    try{ if(typeof refreshProfilesFromCloud==='function') await refreshProfilesFromCloud(); }catch(e){}
+    try{ if(typeof rAdmin==='function') rAdmin(); }catch(e){}
+  }
+
+  window.approuverProfil = async function(name){
+    var c = cli();
+    if(!c){ alert("Serveur injoignable. Connectez-vous a Internet puis reessayez."); return; }
+    try{
+      var cur = await c.from('profiles').select('perms').eq('name', name).maybeSingle();
+      var perms = (cur && cur.data && cur.data.perms && Object.keys(cur.data.perms).length) ? cur.data.perms : PERMS_DEFAUT;
+      var r = await c.from('profiles').update({statut:'approuve', actif:true, perms:perms, deleted_at:null}).eq('name', name).select();
+      if(r.error){ alert("Echec de l'approbation : "+r.error.message); return; }
+      if(!r.data || !r.data.length){ alert("Compte introuvable sur le serveur : "+name); return; }
+      majLocal(name, function(p){ p.statut='approuve'; p.actif=true; p.perms=perms; return p; });
+      await apresOperation();
+      alert("Compte approuve : "+name);
+    }catch(e){ alert("Erreur : "+((e&&e.message)?e.message:e)); }
+  };
+
+  window.adminSupprimerProfil = async function(name){
+    if(!confirm("Supprimer definitivement le compte \""+name+"\" ? Cette action est irreversible.")) return;
+    var c = cli();
+    if(!c){ alert("Serveur injoignable. Connectez-vous a Internet puis reessayez."); return; }
+    try{
+      var r = await c.from('profiles').delete().eq('name', name).select();
+      if(r.error){ alert("Echec de la suppression : "+r.error.message); return; }
+      majLocal(name, function(){ return null; });
+      await apresOperation();
+      alert("Compte supprime : "+name);
+    }catch(e){ alert("Erreur : "+((e&&e.message)?e.message:e)); }
+  };
+
+  window.rejeterProfil = async function(name){
+    if(!confirm("Rejeter la demande de \""+name+"\" ?")) return;
+    var c = cli();
+    if(!c){ alert("Serveur injoignable."); return; }
+    try{
+      var r = await c.from('profiles').delete().eq('name', name).select();
+      if(r.error){ alert("Echec du rejet : "+r.error.message); return; }
+      majLocal(name, function(){ return null; });
+      await apresOperation();
+      alert("Demande rejetee : "+name);
+    }catch(e){ alert("Erreur : "+((e&&e.message)?e.message:e)); }
+  };
+})();
+</script>
 </body>
 </html>
 
