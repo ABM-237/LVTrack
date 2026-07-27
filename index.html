@@ -6841,6 +6841,148 @@ if(_origRenderAll && !window._renderAllPatched){
   }catch(e){ console.warn('[AUTH WATCH]', e); }
 })();
 </script>
+<script>
+/* LVTRACK-S3-INTEGRATION */
+(function(){
+  var LAMBDA = "https://crw4g2mkj473pvnegnv7luumiu0dickw.lambda-url.eu-north-1.on.aws/";
+  function cli(){
+    try{ if(typeof _getAuthClient==='function'){ var c=_getAuthClient(); if(c) return c; } }catch(e){}
+    try{ if(typeof _sb!=='undefined' && _sb) return _sb; }catch(e){}
+    return null;
+  }
+  function anonKey(){
+    var c=cli();
+    try{ if(c && c.supabaseKey) return c.supabaseKey; }catch(e){}
+    try{ if(c && c.rest && c.rest.headers && c.rest.headers.apikey) return c.rest.headers.apikey; }catch(e){}
+    try{ if(c && c.headers && c.headers.apikey) return c.headers.apikey; }catch(e){}
+    return '';
+  }
+  async function jeton(){
+    var c=cli(); if(!c||!c.auth) return null;
+    try{ var s=await c.auth.getSession(); return (s && s.data && s.data.session && s.data.session.access_token) || null; }catch(e){ return null; }
+  }
+  async function s3(action, key, extra){
+    var t = await jeton();
+    if(!t) throw new Error("Session expiree : reconnectez-vous.");
+    var payload = Object.assign({action:action, key:key}, extra||{});
+    var r = await fetch(LAMBDA, { method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+t,'apikey':anonKey()},
+      body: JSON.stringify(payload) });
+    var j = {};
+    try{ j = await r.json(); }catch(e){}
+    if(!r.ok) throw new Error(j.error || ('Erreur '+r.status));
+    return j;
+  }
+  window.lvS3 = s3;
+
+  function b64Of(d){ var i=String(d).indexOf(','); return i<0 ? '' : String(d).slice(i+1); }
+  function mimeOf(d){ var m=/^data:([^;,]+)/.exec(String(d)); return m ? m[1] : 'application/octet-stream'; }
+  function versBlob(u){
+    var p = String(u).split(',');
+    var mime = (/^data:([^;]+)/.exec(p[0]) || [])[1] || 'application/octet-stream';
+    var bin = atob(p[1] || '');
+    var arr = new Uint8Array(bin.length);
+    for(var i=0;i<bin.length;i++) arr[i] = bin.charCodeAt(i);
+    return new Blob([arr], {type: mime});
+  }
+
+  var origSave = window.saveUploads;
+  var origGet  = window.getUploads;
+  var origSupp = window.supprimerUpload;
+  var enCours = false;
+
+  if(typeof origSave === 'function'){
+    window.saveUploads = function(list){
+      origSave(list);
+      if(enCours) return;
+      var aFaire = (list||[]).filter(function(u){ return u && u.data && !u.s3key; });
+      if(!aFaire.length) return;
+      enCours = true;
+      (async function(){
+        var n = 0;
+        for(var i=0;i<aFaire.length;i++){
+          var u = aFaire[i];
+          try{
+            var nom = String(u.nom||'fichier').replace(/[^A-Za-z0-9._-]/g,'_');
+            var key = 'pj/' + (u.id||Date.now()) + '_' + nom;
+            await s3('upload', key, { data: b64Of(u.data), contentType: u.type || mimeOf(u.data) });
+            u.s3key = key; delete u.data; n++;
+          }catch(e){ console.warn('[S3 envoi]', e && e.message); }
+        }
+        try{ origSave(list); }catch(e){}
+        enCours = false;
+        if(n){ try{ if(typeof rUploadList==='function') rUploadList(); }catch(e){} }
+      })();
+    };
+  }
+
+  async function contenu(u){
+    if(u && u.data) return u.data;
+    if(!u || !u.s3key) return null;
+    var r = await s3('download', u.s3key);
+    return 'data:' + (r.contentType || u.type || 'application/octet-stream') + ';base64,' + r.data;
+  }
+  function trouver(id){
+    var l = (typeof origGet==='function') ? (origGet()||[]) : [];
+    for(var i=0;i<l.length;i++){ if(String(l[i].id)===String(id)) return l[i]; }
+    return null;
+  }
+
+  window.ouvrirUpload = async function(id){
+    var u = trouver(id);
+    if(!u) return alert("Piece jointe introuvable.");
+    try{
+      var d = await contenu(u);
+      if(!d) return alert("Fichier indisponible.");
+      window.open(URL.createObjectURL(versBlob(d)), '_blank');
+    }catch(e){ alert("Impossible d'ouvrir le fichier : " + (e && e.message ? e.message : e)); }
+  };
+
+  window.telechargerUpload = async function(id){
+    var u = trouver(id);
+    if(!u) return alert("Piece jointe introuvable.");
+    try{
+      var d = await contenu(u);
+      if(!d) return alert("Fichier indisponible.");
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(versBlob(d));
+      a.download = u.nom || 'fichier';
+      document.body.appendChild(a); a.click(); a.remove();
+    }catch(e){ alert("Telechargement impossible : " + (e && e.message ? e.message : e)); }
+  };
+
+  if(typeof origSupp === 'function'){
+    window.supprimerUpload = async function(id){
+      var u = trouver(id);
+      if(u && u.s3key){ try{ await s3('delete', u.s3key); }catch(e){ console.warn('[S3 suppression]', e && e.message); } }
+      return origSupp(id);
+    };
+  }
+
+  var origSaveArch = window.saveArchives;
+  if(typeof origSaveArch === 'function'){
+    window.saveArchives = function(list){
+      origSaveArch(list);
+      (async function(){
+        try{
+          var b64 = btoa(unescape(encodeURIComponent(JSON.stringify(list||[]))));
+          await s3('upload', 'archives/archives.json', { data: b64, contentType: 'application/json' });
+        }catch(e){ console.warn('[S3 archives]', e && e.message); }
+      })();
+    };
+  }
+
+  window.restaurerArchivesDepuisS3 = async function(){
+    try{
+      var r = await s3('download', 'archives/archives.json');
+      var list = JSON.parse(decodeURIComponent(escape(atob(r.data))));
+      if(typeof origSaveArch==='function') origSaveArch(list);
+      try{ if(typeof rArchives==='function') rArchives(); }catch(e){}
+      alert("Archives restaurees depuis le cloud : " + list.length);
+    }catch(e){ alert("Restauration impossible : " + (e && e.message ? e.message : e)); }
+  };
+})();
+</script>
 </body>
 </html>
 
