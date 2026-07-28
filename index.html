@@ -6866,7 +6866,7 @@ if(_origRenderAll && !window._renderAllPatched){
     if(!t) throw new Error("Session expiree : reconnectez-vous.");
     var payload = Object.assign({action:action, key:key}, extra||{});
     var r = await fetch(LAMBDA, { method:'POST',
-      headers:{'Content-Type':'application/json','Authorization':'Bearer '+t,'apikey':anonKey()},
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+t,'apikey': (anonKey() || t)},
       body: JSON.stringify(payload) });
     var j = {};
     try{ j = await r.json(); }catch(e){}
@@ -6907,7 +6907,7 @@ if(_origRenderAll && !window._renderAllPatched){
             var key = 'pj/' + (u.id||Date.now()) + '_' + nom;
             await s3('upload', key, { data: b64Of(u.data), contentType: u.type || mimeOf(u.data) });
             u.s3key = key; delete u.data; n++;
-          }catch(e){ console.warn('[S3 envoi]', e && e.message); }
+          }catch(e){ if(!window.__s3Alerte){ window.__s3Alerte=1; alert("Envoi vers le cloud impossible : " + (e && e.message ? e.message : e)); } console.warn('[S3 envoi]', e); }
         }
         try{ origSave(list); }catch(e){}
         enCours = false;
@@ -6982,6 +6982,14 @@ if(_origRenderAll && !window._renderAllPatched){
     }catch(e){ alert("Restauration impossible : " + (e && e.message ? e.message : e)); }
   };
 })();
+</script>
+<script>
+window.testerS3 = async function(){
+  try{
+    var r = await window.lvS3('upload','pj/_test_'+Date.now()+'.txt',{data: btoa('test LVTrack'), contentType:'text/plain'});
+    alert("Test reussi. Fichier cree dans S3 : " + r.key);
+  }catch(e){ alert("Test echoue : " + (e && e.message ? e.message : e)); }
+};
 </script>
 </body>
 </html>
