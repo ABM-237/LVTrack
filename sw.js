@@ -1,18 +1,19 @@
-// LVTrack — Service Worker v6 (vrai support hors-ligne)
-const CACHE_NAME = 'lvtrack-v6';
+// LVTrack - Service Worker v7
+// Correction : l'application continue de s'ouvrir meme si le serveur repond
+// une erreur (503, 500, 404...). Auparavant la page d'erreur etait servie ET
+// mise en cache, ce qui rendait l'application inutilisable durablement.
 
-// Fichiers de l'application elle-même (même origine).
+const CACHE_NAME = 'lvtrack-v7';
+
 const APP_SHELL = [
   './',
   './index.html',
   './manifest.json',
   './icon-192.png',
   './icon-512.png',
+  './icon-180.png',
 ];
 
-// Bibliothèques externes dont l'app a besoin pour fonctionner — sans elles,
-// l'app ne peut pas démarrer du tout hors-ligne (Supabase, Excel, ZIP, graphiques).
-// Elles sont versionnées dans l'URL, donc sans risque de rester en cache longtemps.
 const LIBS = [
   'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js',
   'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.1/dist/umd/supabase.min.js',
@@ -22,17 +23,20 @@ const LIBS = [
 
 self.addEventListener('install', e => {
   e.waitUntil(
-    caches.keys()
-      .then(keys => Promise.all(keys.map(k => caches.delete(k))))
-      .then(() => caches.open(CACHE_NAME))
+    caches.open(CACHE_NAME)
       .then(async cache => {
-        await cache.addAll(APP_SHELL);
-        // Chaque lib est ajoutée séparément : si une CDN est indisponible au
-        // moment de l'installation, ça ne doit pas empêcher le reste de marcher.
+        // Chaque fichier separement : un echec ne doit pas tout annuler.
+        await Promise.all(
+          APP_SHELL.map(u =>
+            fetch(u, { cache: 'reload' })
+              .then(r => (r.ok ? cache.put(u, r) : null))
+              .catch(() => null)
+          )
+        );
         await Promise.all(
           LIBS.map(url =>
             fetch(url, { mode: 'cors' })
-              .then(resp => resp.ok && cache.put(url, resp))
+              .then(r => (r.ok ? cache.put(url, r) : null))
               .catch(() => null)
           )
         );
@@ -58,39 +62,72 @@ function isLib(url) {
     url.includes('fonts.gstatic.com');
 }
 
-self.addEventListener('fetch', e => {
-  const url = e.request.url;
+// Reponse de secours quand tout echoue sur une navigation.
+async function secours(request) {
+  const cache = await caches.open(CACHE_NAME);
+  return (await cache.match(request)) ||
+         (await cache.match('./index.html')) ||
+         (await cache.match('./')) ||
+         new Response(
+           '<!doctype html><meta charset="utf-8">' +
+           '<div style="font-family:sans-serif;padding:24px;text-align:center">' +
+           '<h2>LVTrack momentanement indisponible</h2>' +
+           '<p>Le serveur ne repond pas et aucune version hors-ligne n\'est enregistree.</p>' +
+           '<p>Reessayez dans quelques minutes.</p></div>',
+           { headers: { 'Content-Type': 'text/html; charset=utf-8' }, status: 200 }
+         );
+}
 
-  if (url.includes('supabase.co')) {
-    // Données métier : toujours essayer le réseau en premier (on ne veut
-    // jamais afficher une écriture périmée), l'app gère elle-même son cache
-    // local (localStorage) pour la consultation hors-ligne.
-    e.respondWith(fetch(e.request).catch(() => caches.match(e.request)));
+self.addEventListener('fetch', e => {
+  const req = e.request;
+  const url = req.url;
+
+  if (req.method !== 'GET') return;
+
+  // Donnees metier : reseau prioritaire, jamais de cache d'erreur.
+  if (url.includes('supabase.co') || url.includes('lambda-url')) {
+    e.respondWith(fetch(req).catch(() => caches.match(req)));
     return;
   }
 
+  // Bibliotheques versionnees : cache prioritaire.
   if (isLib(url)) {
-    // Bibliothèques versionnées : servir depuis le cache en priorité (rapide
-    // et fonctionne hors-ligne), tout en rafraîchissant le cache en arrière-plan.
     e.respondWith(
-      caches.match(e.request).then(cached => {
-        const network = fetch(e.request).then(resp => {
-          if (resp.ok) caches.open(CACHE_NAME).then(c => c.put(e.request, resp.clone()));
-          return resp;
+      caches.match(req).then(cached => {
+        const reseau = fetch(req).then(r => {
+          if (r && r.ok) caches.open(CACHE_NAME).then(c => c.put(req, r.clone()));
+          return r;
         }).catch(() => cached);
-        return cached || network;
+        return cached || reseau;
       })
     );
     return;
   }
 
-  // Fichiers de l'app elle-même : réseau en premier pour avoir les mises à
-  // jour, secours sur le cache si hors-ligne.
-  e.respondWith(
-    fetch(e.request).then(resp => {
-      const clone = resp.clone();
-      caches.open(CACHE_NAME).then(c => c.put(e.request, clone));
-      return resp;
-    }).catch(() => caches.match(e.request))
-  );
+  // Fichiers de l'application : reseau en premier, MAIS on ne met en cache
+  // et on ne sert que les reponses valides. Toute erreur serveur bascule
+  // sur la version hors-ligne.
+  e.respondWith((async () => {
+    try {
+      const r = await fetch(req);
+      if (r && r.ok) {
+        const copie = r.clone();
+        caches.open(CACHE_NAME).then(c => c.put(req, copie)).catch(() => {});
+        return r;
+      }
+      // 503, 500, 404... : on prefere la version en cache.
+      const cache = await caches.open(CACHE_NAME);
+      const enCache = await cache.match(req);
+      if (enCache) return enCache;
+      if (req.mode === 'navigate') return await secours(req);
+      return r;
+    } catch (err) {
+      // Hors ligne / reseau coupe.
+      const cache = await caches.open(CACHE_NAME);
+      const enCache = await cache.match(req);
+      if (enCache) return enCache;
+      if (req.mode === 'navigate') return await secours(req);
+      throw err;
+    }
+  })());
 });
