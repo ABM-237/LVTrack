@@ -124,10 +124,10 @@
 <link rel="icon" href="icon-192.png">
 <title>LVTrack v4.8 - LVG / LVD / DF10</title>
 <!-- [FIX PERF] Preconnect pour les fonts Google -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+
 <!-- [FIX PERF] Réduit de 7 à 3 variantes de font (seules celles utilisées dans le CSS) -->
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
+
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <!-- [DB] Client Supabase - 3 CDN en fallback (réseau Cameroun) -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.1/dist/umd/supabase.min.js"
@@ -147,14 +147,14 @@
 }
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;}}
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'DM Mono',monospace;background:var(--bg);color:var(--tx);min-height:100vh;}
+body{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;}
 /* [A11Y] Focus visible pour navigation clavier */
 :focus-visible{outline:2px solid var(--ac);outline-offset:2px;border-radius:3px;}
 :focus:not(:focus-visible){outline:none;}
 .skip-link{position:absolute;top:-100%;left:16px;background:var(--ac);color:#000;padding:8px 16px;border-radius:0 0 6px 6px;font-size:.8rem;font-weight:700;z-index:9999;transition:top .2s;}
 .skip-link:focus{top:0;}
 header{background:var(--sur);border-bottom:1px solid var(--bor);padding:10px 14px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
-.logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.15rem;color:var(--ac);letter-spacing:-.03em;line-height:1;}
+.logo{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;font-weight:800;font-size:1.15rem;color:var(--ac);letter-spacing:-.03em;line-height:1;}
 .logo span{color:var(--tx);}
 .hb{font-size:.58rem;font-weight:700;padding:2px 7px;border-radius:20px;letter-spacing:.08em;text-transform:uppercase;}
 .hb.lvg{background:rgba(240,165,0,.18);color:var(--ac);}
@@ -163,7 +163,7 @@ header{background:var(--sur);border-bottom:1px solid var(--bor);padding:10px 14p
 nav{display:flex;gap:2px;padding:7px 14px;background:var(--sur);border-bottom:1px solid var(--bor);overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:thin;}
 nav::-webkit-scrollbar{height:3px;}
 nav::-webkit-scrollbar-thumb{background:var(--bor);border-radius:3px;}
-nav button{font-family:'DM Mono',monospace;font-size:.68rem;background:transparent;border:1px solid transparent;color:var(--mu);padding:5px 10px;border-radius:6px;cursor:pointer;transition:all .15s;white-space:nowrap;}
+nav button{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;font-size:.68rem;background:transparent;border:1px solid transparent;color:var(--mu);padding:5px 10px;border-radius:6px;cursor:pointer;transition:all .15s;white-space:nowrap;}
 nav button.locked{color:var(--bor)!important;cursor:not-allowed;opacity:.45;}
 nav button.locked::after{content:' 🔒';font-size:.55rem;}
 nav button.readonly-nav{color:var(--bl)!important;border-color:rgba(74,143,255,.3);}
@@ -172,18 +172,18 @@ nav button.active{background:var(--sur2);border-color:var(--bor);color:var(--ac)
 nav button:hover:not(.active):not(.locked){color:var(--tx);}
 main{padding:12px 14px;max-width:1400px;}
 .page{display:none;}.page.active{display:block;}
-h2{font-family:'Syne',sans-serif;font-weight:700;font-size:1.05rem;margin-bottom:13px;}
+h2{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;font-weight:700;font-size:1.05rem;margin-bottom:13px;}
 h2 span{color:var(--ac);}
 .card{background:var(--sur);border:1px solid var(--bor);border-radius:var(--r);padding:12px;margin-bottom:13px;}
-.card h3{font-family:'Syne',sans-serif;font-size:.78rem;font-weight:700;margin-bottom:10px;text-transform:uppercase;letter-spacing:.05em;display:flex;align-items:center;gap:7px;flex-wrap:wrap;}
+.card h3{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;font-size:.78rem;font-weight:700;margin-bottom:10px;text-transform:uppercase;letter-spacing:.05em;display:flex;align-items:center;gap:7px;flex-wrap:wrap;}
 .dot{width:6px;height:6px;border-radius:50%;display:inline-block;flex-shrink:0;}
 .note{font-size:.68rem;color:var(--mu);background:var(--sur2);padding:7px 10px;border-radius:5px;border-left:3px solid var(--bor);margin-bottom:10px;line-height:1.65;}
 .fr{display:grid;grid-template-columns:1fr;gap:7px;align-items:end;}
 .fg{display:flex;flex-direction:column;gap:4px;}
 .fg label{font-size:.6rem;color:var(--mu);text-transform:uppercase;letter-spacing:.06em;}
-.fg input,.fg select{font-family:'DM Mono',monospace;font-size:.76rem;background:var(--bg);border:1px solid var(--bor);color:var(--tx);padding:6px 8px;border-radius:5px;transition:border-color .15s;}
+.fg input,.fg select{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;font-size:.76rem;background:var(--bg);border:1px solid var(--bor);color:var(--tx);padding:6px 8px;border-radius:5px;transition:border-color .15s;}
 .fg input:focus,.fg select:focus{border-color:var(--ac);}
-.btn{font-family:'DM Mono',monospace;font-size:.72rem;font-weight:500;background:var(--ac);color:#000;border:none;padding:6px 14px;border-radius:5px;cursor:pointer;transition:opacity .15s;white-space:nowrap;align-self:flex-end;}
+.btn{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;font-size:.72rem;font-weight:500;background:var(--ac);color:#000;border:none;padding:6px 14px;border-radius:5px;cursor:pointer;transition:opacity .15s;white-space:nowrap;align-self:flex-end;}
 .btn:hover{opacity:.82;}.btn.sec{background:var(--sur2);color:var(--tx);border:1px solid var(--bor);}
 .btn.bl{background:var(--bl);color:#fff;}.btn.pu{background:var(--pu);color:#fff;}
 .btn.te{background:var(--te);color:#000;}.btn.sm{padding:2px 7px;font-size:.63rem;}
@@ -207,39 +207,39 @@ tr:last-child td{border-bottom:none;}tr:hover td{background:var(--sur2);}
 .g3{display:grid;grid-template-columns:1fr;gap:13px;}
 .titre-card{background:var(--sur);border:1px solid var(--bor);border-radius:var(--r);overflow:hidden;}
 .titre-card .tc-head{padding:12px 15px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--bor);}
-.titre-card .tc-head .tc-label{font-family:'Syne',sans-serif;font-weight:800;font-size:1.4rem;}
+.titre-card .tc-head .tc-label{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;font-weight:800;font-size:1.4rem;}
 .titre-card .tc-head .tc-desc{font-size:.68rem;color:var(--mu);}
 .titre-card .tc-body{padding:12px 15px;}
 .tc-kpi{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
 .tc-k{background:var(--bg);padding:9px 10px;border-radius:6px;}
 .tc-k .tk-l{font-size:.58rem;color:var(--mu);text-transform:uppercase;margin-bottom:3px;}
-.tc-k .tk-v{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:700;}
+.tc-k .tk-v{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;font-size:1.05rem;font-weight:700;}
 .soc-card{background:var(--sur);border:1px solid var(--bor);border-radius:var(--r);padding:13px;}
-.soc-card .sc-name{font-family:'Syne',sans-serif;font-weight:700;font-size:.88rem;margin-bottom:10px;color:var(--tx);}
+.soc-card .sc-name{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;font-weight:700;font-size:.88rem;margin-bottom:10px;color:var(--tx);}
 .sc-row{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
 .sc-item{background:var(--bg);padding:8px 9px;border-radius:5px;border-top:2px solid;}
 .sc-item .si-type{font-size:.58rem;font-weight:700;margin-bottom:2px;}
-.sc-item .si-stock{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;}
+.sc-item .si-stock{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;font-size:1rem;font-weight:700;}
 .sc-item .si-sub{font-size:.6rem;color:var(--mu);margin-top:1px;}
 .modal-bg{display:none;position:fixed;top:0;right:0;bottom:0;left:0;background:rgba(0,0,0,.78);z-index:100;align-items:center;justify-content:center;}
 .modal-bg.open{display:flex;}
 .modal{background:var(--sur);border:1px solid var(--bor);border-radius:11px;padding:20px;min-width:0;max-width:520px;width:92%;max-height:90vh;overflow-y:auto;}
-.modal h3{font-family:'Syne',sans-serif;font-size:.9rem;margin-bottom:11px;color:var(--ac);}
+.modal h3{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;font-size:.9rem;margin-bottom:11px;color:var(--ac);}
 .modal-foot{display:flex;gap:7px;justify-content:flex-end;margin-top:13px;flex-wrap:wrap;}
 .nc{display:inline-block;background:var(--sur2);border:1px solid var(--bor);border-radius:3px;padding:1px 5px;font-size:.62rem;margin:2px;}
 #loginPage{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;background:var(--bg);padding:16px;}
 .login-box{background:var(--sur);border:1px solid var(--bor);border-radius:14px;padding:28px 22px;width:100%;max-width:400px;box-shadow:0 24px 60px rgba(0,0,0,.5);}
-.login-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:2rem;color:var(--ac);letter-spacing:-.04em;text-align:center;margin-bottom:4px;}
+.login-logo{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;font-weight:800;font-size:2rem;color:var(--ac);letter-spacing:-.04em;text-align:center;margin-bottom:4px;}
 .login-logo span{color:var(--tx);}
 .login-sub{font-size:.68rem;color:var(--mu);text-align:center;margin-bottom:28px;}
 .login-tabs{display:flex;gap:0;margin-bottom:22px;background:var(--bg);border-radius:7px;padding:3px;}
-.login-tab{flex:1;font-family:'DM Mono',monospace;font-size:.7rem;padding:7px;border:none;background:transparent;color:var(--mu);cursor:pointer;border-radius:5px;transition:all .15s;}
+.login-tab{flex:1;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;font-size:.7rem;padding:7px;border:none;background:transparent;color:var(--mu);cursor:pointer;border-radius:5px;transition:all .15s;}
 .login-tab.active{background:var(--sur2);color:var(--ac);border:1px solid var(--bor);}
 .login-input-group{margin-bottom:14px;}
 .login-input-group label{display:block;font-size:.6rem;color:var(--mu);text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px;}
-.login-input-group input{width:100%;font-family:'DM Mono',monospace;font-size:.8rem;background:var(--bg);border:1px solid var(--bor);color:var(--tx);padding:9px 12px;border-radius:6px;transition:border-color .15s;}
+.login-input-group input{width:100%;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;font-size:.8rem;background:var(--bg);border:1px solid var(--bor);color:var(--tx);padding:9px 12px;border-radius:6px;transition:border-color .15s;}
 .login-input-group input:focus{border-color:var(--ac);}
-.login-btn{width:100%;font-family:'DM Mono',monospace;font-size:.78rem;font-weight:600;background:var(--ac);color:#000;border:none;padding:10px;border-radius:7px;cursor:pointer;transition:opacity .15s;margin-top:4px;}
+.login-btn{width:100%;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;font-size:.78rem;font-weight:600;background:var(--ac);color:#000;border:none;padding:10px;border-radius:7px;cursor:pointer;transition:opacity .15s;margin-top:4px;}
 .login-btn:hover{opacity:.85;}
 .login-btn.sec{background:var(--sur2);color:var(--tx);border:1px solid var(--bor);}
 .login-err{font-size:.7rem;color:var(--re);background:rgba(224,90,90,.1);border:1px solid rgba(224,90,90,.3);padding:7px 11px;border-radius:5px;margin-top:10px;display:none;}
@@ -247,7 +247,7 @@ tr:last-child td{border-bottom:none;}tr:hover td{background:var(--sur2);}
 .profiles-list{margin-top:16px;}
 .profile-item{display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--bg);border:1px solid var(--bor);border-radius:7px;margin-bottom:7px;cursor:pointer;transition:border-color .15s;}
 .profile-item:hover{border-color:var(--ac);}
-.profile-avatar{width:34px;height:34px;border-radius:50%;background:var(--sur2);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:700;font-size:.9rem;color:var(--ac);border:2px solid var(--bor);flex-shrink:0;}
+.profile-avatar{width:34px;height:34px;border-radius:50%;background:var(--sur2);display:flex;align-items:center;justify-content:center;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;font-weight:700;font-size:.9rem;color:var(--ac);border:2px solid var(--bor);flex-shrink:0;}
 .profile-name{font-weight:600;font-size:.8rem;}
 .profile-role{font-size:.62rem;color:var(--mu);}
 #appWrapper{display:none;}
@@ -268,7 +268,7 @@ tr:last-child td{border-bottom:none;}tr:hover td{background:var(--sur2);}
    ═══════════════════════════════════════════════════════════════ */
 .kpi{background:var(--sur);border:1px solid var(--bor);border-radius:var(--r);padding:12px 14px;display:flex;flex-direction:column;gap:4px;min-width:0;}
 .kl{font-size:.58rem;color:var(--mu);text-transform:uppercase;letter-spacing:.07em;line-height:1.3;}
-.kv{font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:700;color:var(--tx);line-height:1.15;word-break:break-word;}
+.kv{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;font-size:1.3rem;font-weight:700;color:var(--tx);line-height:1.15;word-break:break-word;}
 .ks{font-size:.6rem;color:var(--mu);margin-top:1px;}
 .c-green{color:var(--gr)!important;}
 .c-red{color:var(--re)!important;}
@@ -380,7 +380,7 @@ button:disabled{opacity:.5;cursor:not-allowed;}
 .mt-6{margin-top:6px;}.mt-8{margin-top:8px;}
 .gap-6{gap:6px;}.gap-8{gap:8px;}.gap-10{gap:10px;}
 .d-flex{display:flex;}.d-grid{display:grid;}.flex-wrap{flex-wrap:wrap;}.ai-c{align-items:center;}
-.font-syne{font-family:'Syne',sans-serif;}.font-mono{font-family:'DM Mono',monospace;}
+.font-syne{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;}.font-mono{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;}
 .bor-1{border:1px solid var(--bor);}
 .overflow-x{overflow-x:auto;}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
@@ -426,7 +426,7 @@ button:disabled{opacity:.5;cursor:not-allowed;}
 
 <!-- [FIX P3-18b] Message pour navigateurs sans JavaScript -->
 <noscript>
-  <div style="padding:40px;text-align:center;color:#e05a5a;background:#181c27;font-family:sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center">
+  <div style="padding:40px;text-align:center;color:#e05a5a;background:#181c27;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center">
     ⚠ Cette application nécessite JavaScript pour fonctionner. Veuillez l'activer dans votre navigateur.
   </div>
 </noscript>
@@ -504,8 +504,8 @@ button:disabled{opacity:.5;cursor:not-allowed;}
     <button type="button" class="btn sec" style="padding:4px 10px;font-size:.63rem;border-color:rgba(46,204,138,.4);color:var(--gr)" onclick="forcerSync()" title="Forcer la synchronisation avec la base de données">🔄 Sync</button>
 
     <!-- [FIX P2-13] div onclick remplacé par button pour accessibilité clavier -->
-    <button type="button" id="user_badge" style="display:flex;align-items:center;gap:7px;background:var(--sur2);border:1px solid var(--bor);border-radius:20px;padding:4px 10px 4px 4px;cursor:pointer;font-family:'DM Mono',monospace" onclick="demanderDeconnexion()" aria-label="Se déconnecter">
-      <div id="user_avatar" style="width:24px;height:24px;border-radius:50%;background:var(--ac);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:700;font-size:.7rem;color:#000">?</div>
+    <button type="button" id="user_badge" style="display:flex;align-items:center;gap:7px;background:var(--sur2);border:1px solid var(--bor);border-radius:20px;padding:4px 10px 4px 4px;cursor:pointer;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif" onclick="demanderDeconnexion()" aria-label="Se déconnecter">
+      <div id="user_avatar" style="width:24px;height:24px;border-radius:50%;background:var(--ac);display:flex;align-items:center;justify-content:center;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;font-weight:700;font-size:.7rem;color:#000">?</div>
       <span id="user_name_disp" style="font-size:.68rem;color:var(--tx)">-</span>
       <span style="font-size:.58rem;color:var(--mu)">↩</span>
     </button>
@@ -554,11 +554,11 @@ button:disabled{opacity:.5;cursor:not-allowed;}
     <div class="fg" style="min-width:0">
       <label>Type de période</label>
       <div style="display:flex;gap:3px">
-        <button id="fp_all"   onclick="setTypePeriode('')"      class="fp-btn" style="font-family:'DM Mono',monospace;font-size:.62rem;padding:5px 10px;border-radius:5px 0 0 5px;border:1px solid var(--bor);background:var(--ac);color:#000;cursor:pointer;transition:all .15s">Tout</button>
-        <button id="fp_day"   onclick="setTypePeriode('day')"   class="fp-btn" style="font-family:'DM Mono',monospace;font-size:.62rem;padding:5px 10px;border:1px solid var(--bor);border-left:none;background:var(--sur2);color:var(--mu);cursor:pointer;transition:all .15s">Jour</button>
-        <button id="fp_week"  onclick="setTypePeriode('week')"  class="fp-btn" style="font-family:'DM Mono',monospace;font-size:.62rem;padding:5px 10px;border:1px solid var(--bor);border-left:none;background:var(--sur2);color:var(--mu);cursor:pointer;transition:all .15s">Semaine</button>
-        <button id="fp_month" onclick="setTypePeriode('month')" class="fp-btn" style="font-family:'DM Mono',monospace;font-size:.62rem;padding:5px 10px;border:1px solid var(--bor);border-left:none;background:var(--sur2);color:var(--mu);cursor:pointer;transition:all .15s">Mois</button>
-        <button id="fp_year"  onclick="setTypePeriode('year')"  class="fp-btn" style="font-family:'DM Mono',monospace;font-size:.62rem;padding:5px 10px;border-radius:0 5px 5px 0;border:1px solid var(--bor);border-left:none;background:var(--sur2);color:var(--mu);cursor:pointer;transition:all .15s">Année</button>
+        <button id="fp_all"   onclick="setTypePeriode('')"      class="fp-btn" style="font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;font-size:.62rem;padding:5px 10px;border-radius:5px 0 0 5px;border:1px solid var(--bor);background:var(--ac);color:#000;cursor:pointer;transition:all .15s">Tout</button>
+        <button id="fp_day"   onclick="setTypePeriode('day')"   class="fp-btn" style="font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;font-size:.62rem;padding:5px 10px;border:1px solid var(--bor);border-left:none;background:var(--sur2);color:var(--mu);cursor:pointer;transition:all .15s">Jour</button>
+        <button id="fp_week"  onclick="setTypePeriode('week')"  class="fp-btn" style="font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;font-size:.62rem;padding:5px 10px;border:1px solid var(--bor);border-left:none;background:var(--sur2);color:var(--mu);cursor:pointer;transition:all .15s">Semaine</button>
+        <button id="fp_month" onclick="setTypePeriode('month')" class="fp-btn" style="font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;font-size:.62rem;padding:5px 10px;border:1px solid var(--bor);border-left:none;background:var(--sur2);color:var(--mu);cursor:pointer;transition:all .15s">Mois</button>
+        <button id="fp_year"  onclick="setTypePeriode('year')"  class="fp-btn" style="font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;font-size:.62rem;padding:5px 10px;border-radius:0 5px 5px 0;border:1px solid var(--bor);border-left:none;background:var(--sur2);color:var(--mu);cursor:pointer;transition:all .15s">Année</button>
       </div>
     </div>
 
@@ -568,25 +568,25 @@ button:disabled{opacity:.5;cursor:not-allowed;}
       <div id="fp_picker_day" style="display:none" class="fg">
         <label for="fp_val_day">Choisir un jour</label>
         <input type="date" id="fp_val_day" onchange="rDash()"
-          style="font-family:'DM Mono',monospace;font-size:.72rem;background:var(--bg);border:1.5px solid var(--ac);color:var(--tx);padding:5px 9px;border-radius:6px">
+          style="font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;font-size:.72rem;background:var(--bg);border:1.5px solid var(--ac);color:var(--tx);padding:5px 9px;border-radius:6px">
       </div>
       <!-- Semaine libre -->
       <div id="fp_picker_week" style="display:none" class="fg">
         <label for="fp_val_week">Choisir une semaine</label>
         <input type="week" id="fp_val_week" onchange="rDash()"
-          style="font-family:'DM Mono',monospace;font-size:.72rem;background:var(--bg);border:1.5px solid var(--ac);color:var(--tx);padding:5px 9px;border-radius:6px">
+          style="font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;font-size:.72rem;background:var(--bg);border:1.5px solid var(--ac);color:var(--tx);padding:5px 9px;border-radius:6px">
       </div>
       <!-- Mois libre -->
       <div id="fp_picker_month" style="display:none" class="fg">
         <label for="fp_val_month">Choisir un mois</label>
         <input type="month" id="fp_val_month" onchange="rDash()"
-          style="font-family:'DM Mono',monospace;font-size:.72rem;background:var(--bg);border:1.5px solid var(--ac);color:var(--tx);padding:5px 9px;border-radius:6px">
+          style="font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;font-size:.72rem;background:var(--bg);border:1.5px solid var(--ac);color:var(--tx);padding:5px 9px;border-radius:6px">
       </div>
       <!-- Année libre -->
       <div id="fp_picker_year" style="display:none" class="fg">
         <label for="fp_val_year">Choisir une année</label>
         <input type="number" id="fp_val_year" onchange="rDash()" min="2000" max="2099"
-          style="font-family:'DM Mono',monospace;font-size:.72rem;background:var(--bg);border:1.5px solid var(--ac);color:var(--tx);padding:5px 9px;border-radius:6px;width:90px">
+          style="font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;font-size:.72rem;background:var(--bg);border:1.5px solid var(--ac);color:var(--tx);padding:5px 9px;border-radius:6px;width:90px">
       </div>
     </div>
 
@@ -772,9 +772,9 @@ button:disabled{opacity:.5;cursor:not-allowed;}
   <div class="card">
     <h3><span class="dot" style="background:var(--mu)"></span>Historique
       <span style="margin-left:auto;display:flex;gap:6px;align-items:center">
-        <input type="date" id="q_date_from" onchange="rQuits()" title="Du" style="font-family:'DM Mono',monospace;font-size:.65rem;background:var(--bg);border:1px solid var(--bor);color:var(--tx);padding:3px 7px;border-radius:5px">
+        <input type="date" id="q_date_from" onchange="rQuits()" title="Du" style="font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;font-size:.65rem;background:var(--bg);border:1px solid var(--bor);color:var(--tx);padding:3px 7px;border-radius:5px">
         <span style="font-size:.62rem;color:var(--mu)">→</span>
-        <input type="date" id="q_date_to" onchange="rQuits()" title="Au" style="font-family:'DM Mono',monospace;font-size:.65rem;background:var(--bg);border:1px solid var(--bor);color:var(--tx);padding:3px 7px;border-radius:5px">
+        <input type="date" id="q_date_to" onchange="rQuits()" title="Au" style="font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;font-size:.65rem;background:var(--bg);border:1px solid var(--bor);color:var(--tx);padding:3px 7px;border-radius:5px">
         <button class="btn sm sec" onclick="resetFiltreQuits()" title="Réinitialiser">✕</button>
         <button class="btn sm sec" onclick="imprimerQuits()" title="Imprimer">🖨</button>
       </span>
@@ -812,7 +812,7 @@ button:disabled{opacity:.5;cursor:not-allowed;}
       </div>
       <textarea id="l_nums_input" rows="3" oninput="rfLot()"
         placeholder="Saisissez les numéros séparés par virgule ou espace&#10;Ex: 192563, 25566, 2556, 145586"
-        style="width:100%;font-family:'DM Mono',monospace;font-size:.76rem;background:var(--bg);border:1px solid var(--bor);color:var(--tx);padding:8px 10px;border-radius:5px;resize:vertical;transition:border-color .15s;"
+        style="width:100%;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;font-size:.76rem;background:var(--bg);border:1px solid var(--bor);color:var(--tx);padding:8px 10px;border-radius:5px;resize:vertical;transition:border-color .15s;"
         onfocus="this.style.borderColor='var(--ac)'" onblur="this.style.borderColor='var(--bor)'"></textarea>
       <div id="l_nums_preview" style="margin-top:6px;line-height:2;min-height:20px"></div>
     </div>
@@ -859,13 +859,13 @@ button:disabled{opacity:.5;cursor:not-allowed;}
     <div class="fr" style="margin-bottom:12px">
       <div class="fg">
         <label for="dl_soc">Société</label>
-        <select id="dl_soc" onchange="rDlLots()" style="font-family:'DM Mono',monospace;font-size:.78rem">
+        <select id="dl_soc" onchange="rDlLots()" style="font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;font-size:.78rem">
           <option value="">-- Toutes les sociétés --</option>
         </select>
       </div>
       <div class="fg">
         <label for="dl_lot">Lot spécifique <span style="color:var(--mu);font-size:.6rem">(optionnel)</span></label>
-        <select id="dl_lot" style="font-family:'DM Mono',monospace;font-size:.78rem">
+        <select id="dl_lot" style="font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;font-size:.78rem">
           <option value="">-- Tous les lots --</option>
         </select>
       </div>
@@ -885,13 +885,13 @@ button:disabled{opacity:.5;cursor:not-allowed;}
   <div class="card" id="card_suivi_lots">
     <h3><span class="dot" style="background:var(--gr)"></span>Suivi utilisation par lot
       <span style="margin-left:auto;display:flex;gap:6px;align-items:center;flex-wrap:wrap">
-        <select id="suivi_soc" onchange="rSuiviLots()" style="font-family:'DM Mono',monospace;font-size:.72rem;background:var(--bg);border:1px solid var(--bor);color:var(--tx);padding:4px 8px;border-radius:5px">
+        <select id="suivi_soc" onchange="rSuiviLots()" style="font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;font-size:.72rem;background:var(--bg);border:1px solid var(--bor);color:var(--tx);padding:4px 8px;border-radius:5px">
           <option value="">Toutes les sociétés</option>
         </select>
-        <select id="suivi_tf" onchange="rSuiviLots()" style="font-family:'DM Mono',monospace;font-size:.72rem;background:var(--bg);border:1px solid var(--bor);color:var(--tx);padding:4px 8px;border-radius:5px">
+        <select id="suivi_tf" onchange="rSuiviLots()" style="font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;font-size:.72rem;background:var(--bg);border:1px solid var(--bor);color:var(--tx);padding:4px 8px;border-radius:5px">
           <option value="">Tous les titres</option>
         </select>
-        <select id="suivi_type" onchange="rSuiviLots()" style="font-family:'DM Mono',monospace;font-size:.72rem;background:var(--bg);border:1px solid var(--bor);color:var(--tx);padding:4px 8px;border-radius:5px">
+        <select id="suivi_type" onchange="rSuiviLots()" style="font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;font-size:.72rem;background:var(--bg);border:1px solid var(--bor);color:var(--tx);padding:4px 8px;border-radius:5px">
           <option value="">Tous types</option>
           <option value="LVG">LVG</option>
           <option value="LVD">LVD</option>
@@ -1168,7 +1168,7 @@ button:disabled{opacity:.5;cursor:not-allowed;}
     <div style="display:flex;gap:10px;align-items:center;margin-bottom:14px">
       <label style="font-size:.68rem;color:var(--mu);text-transform:uppercase;letter-spacing:.07em">Année archivée :</label>
       <input type="number" id="archive_year" min="2000" max="2099"
-        style="font-family:'DM Mono',monospace;font-size:.88rem;background:var(--bg);border:1.5px solid var(--te);color:var(--tx);padding:6px 12px;border-radius:6px;width:100px;font-weight:700">
+        style="font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;font-size:.88rem;background:var(--bg);border:1.5px solid var(--te);color:var(--tx);padding:6px 12px;border-radius:6px;width:100px;font-weight:700">
     </div>
 
     <div id="archive_msg" style="margin-bottom:10px"></div>
@@ -1206,7 +1206,7 @@ button:disabled{opacity:.5;cursor:not-allowed;}
     <div class="note">Saisissez un numéro de lettre de voiture pour retrouver instantanément le lot, la société et l'état d'utilisation.</div>
     <div style="display:flex;gap:8px;align-items:center;margin-bottom:10px">
       <input type="text" id="rch_input" placeholder="Ex: 192563" 
-        style="flex:1;font-family:'DM Mono',monospace;font-size:.82rem;background:var(--bg);border:2px solid var(--bor);color:var(--tx);padding:9px 12px;border-radius:6px;transition:border-color .15s"
+        style="flex:1;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;font-size:.82rem;background:var(--bg);border:2px solid var(--bor);color:var(--tx);padding:9px 12px;border-radius:6px;transition:border-color .15s"
         oninput="rechercherLV()" onfocus="this.style.borderColor='var(--bl)'" onblur="this.style.borderColor='var(--bor)'">
       <button class="btn bl" onclick="rechercherLV()">🔍 Chercher</button>
       <button class="btn sec" onclick="document.getElementById('rch_input').value='';document.getElementById('rch_result').innerHTML=''">✕</button>
@@ -1217,7 +1217,7 @@ button:disabled{opacity:.5;cursor:not-allowed;}
     <h3><span class="dot" style="background:var(--mu)"></span>Recherche par référence de lot</h3>
     <div style="display:flex;gap:8px;align-items:center;margin-bottom:10px">
       <input type="text" id="rch_lot" placeholder="Ex: LOT-LVG-2024-01"
-        style="flex:1;font-family:'DM Mono',monospace;font-size:.82rem;background:var(--bg);border:2px solid var(--bor);color:var(--tx);padding:9px 12px;border-radius:6px"
+        style="flex:1;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;font-size:.82rem;background:var(--bg);border:2px solid var(--bor);color:var(--tx);padding:9px 12px;border-radius:6px"
         oninput="rechercherLot()">
     </div>
     <div id="rch_lot_result"></div>
@@ -1231,7 +1231,7 @@ button:disabled{opacity:.5;cursor:not-allowed;}
     <h3><span class="dot" style="background:var(--or)"></span>Historique des actions</h3>
     <div class="note">Toutes les actions enregistrées dans l'application avec l'utilisateur et la date/heure.</div>
     <div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap">
-      <select id="jrn_type" onchange="rJournal()" style="font-family:'DM Mono',monospace;font-size:.72rem;background:var(--bg);border:1px solid var(--bor);color:var(--tx);padding:5px 8px;border-radius:5px">
+      <select id="jrn_type" onchange="rJournal()" style="font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;font-size:.72rem;background:var(--bg);border:1px solid var(--bor);color:var(--tx);padding:5px 8px;border-radius:5px">
         <option value="">Tous les types</option>
         <option value="Quittance">Quittances</option>
         <option value="Lot">Lots</option>
@@ -1242,7 +1242,7 @@ button:disabled{opacity:.5;cursor:not-allowed;}
         <option value="Utilisation">Utilisations</option>
         <option value="Connexion">Connexions</option>
       </select>
-      <select id="jrn_user" onchange="rJournal()" style="font-family:'DM Mono',monospace;font-size:.72rem;background:var(--bg);border:1px solid var(--bor);color:var(--tx);padding:5px 8px;border-radius:5px">
+      <select id="jrn_user" onchange="rJournal()" style="font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;font-size:.72rem;background:var(--bg);border:1px solid var(--bor);color:var(--tx);padding:5px 8px;border-radius:5px">
         <option value="">Tous les utilisateurs</option>
       </select>
       <button class="btn sm sec" onclick="viderJournal()" style="color:var(--re)">🗑 Vider</button>
@@ -1851,7 +1851,7 @@ function autoBackupCheck(){
   if(!lastRemind || (now - parseInt(lastRemind)) > 24 * 60 * 60 * 1000){
     setTimeout(()=>{
       const toast = document.createElement('div');
-      toast.style.cssText = 'position:fixed;bottom:20px;right:20px;background:var(--sur);border:2px solid var(--ac);border-radius:12px;padding:16px 20px;z-index:9999;font-family:"DM Mono",monospace;box-shadow:0 8px 32px rgba(0,0,0,.5);max-width:340px';
+      toast.style.cssText = 'position:fixed;bottom:20px;right:20px;background:var(--sur);border:2px solid var(--ac);border-radius:12px;padding:16px 20px;z-index:9999;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;box-shadow:0 8px 32px rgba(0,0,0,.5);max-width:340px';
       toast.innerHTML = '<div style="font-size:.78rem;font-weight:700;color:var(--ac);margin-bottom:8px">💾 Sauvegarde recommandée</div>'
         +'<div style="font-size:.7rem;color:var(--mu);margin-bottom:12px">Pensez à sauvegarder vos données régulièrement pour éviter toute perte.</div>'
         +'<div style="display:flex;gap:8px">'
@@ -2457,7 +2457,7 @@ function goIfAllowed(page){
   if(right!=='none'){ go(page); return; }
   let toast=document.getElementById('_access_toast');
   if(!toast){ toast=document.createElement('div'); toast.id='_access_toast';
-    toast.style.cssText='position:fixed;top:68px;left:50%;transform:translateX(-50%);background:var(--re);color:#fff;padding:9px 20px;border-radius:8px;font-size:.75rem;z-index:9999;font-family:"DM Mono",monospace;pointer-events:none;transition:opacity .3s';
+    toast.style.cssText='position:fixed;top:68px;left:50%;transform:translateX(-50%);background:var(--re);color:#fff;padding:9px 20px;border-radius:8px;font-size:.75rem;z-index:9999;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;pointer-events:none;transition:opacity .3s';
     document.body.appendChild(toast);
   }
   toast.textContent='🔒 Accès refusé - contactez l\'administrateur';
@@ -2579,14 +2579,14 @@ function rAdmin(){
   [['Total',nbTotal,'var(--bl)'],['Actifs',nbActifs,'var(--gr)'],['En attente',nbAttente,'var(--or)'],['Désactivés',nbDesact,'var(--re)']].forEach(function(r){
     html+='<div style="background:var(--sur);border:1px solid var(--bor);border-top:3px solid '+r[2]+';border-radius:var(--r);padding:13px 15px">'
       +'<div style="font-size:.6rem;color:var(--mu);text-transform:uppercase;margin-bottom:4px">'+r[0]+'</div>'
-      +'<div style="font-family:\'Syne\',sans-serif;font-size:1.6rem;font-weight:700;color:'+r[2]+'">'+r[1]+'</div></div>';
+      +'<div style="font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;font-size:1.6rem;font-weight:700;color:'+r[2]+'">'+r[1]+'</div></div>';
   });
   html+='</div>';
 
   // Onglets Admin
   html+='<div style="display:flex;gap:4px;margin-bottom:16px;background:var(--bg);border-radius:8px;padding:4px">'
-    +'<button id="atab_droits" onclick="switchAdminTab(\'droits\')" style="flex:1;font-family:\'DM Mono\',monospace;font-size:.68rem;padding:7px;border:none;border-radius:6px;cursor:pointer;background:var(--ac);color:#000;transition:all .15s">⚙ Droits & Accès</button>'
-    +'<button id="atab_societes" onclick="switchAdminTab(\'societes\')" style="flex:1;font-family:\'DM Mono\',monospace;font-size:.68rem;padding:7px;border:none;border-radius:6px;cursor:pointer;background:transparent;color:var(--mu);transition:all .15s">🏢 Sociétés & Titres assignés</button>'
+    +'<button id="atab_droits" onclick="switchAdminTab(\'droits\')" style="flex:1;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;font-size:.68rem;padding:7px;border:none;border-radius:6px;cursor:pointer;background:var(--ac);color:#000;transition:all .15s">⚙ Droits & Accès</button>'
+    +'<button id="atab_societes" onclick="switchAdminTab(\'societes\')" style="flex:1;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;font-size:.68rem;padding:7px;border:none;border-radius:6px;cursor:pointer;background:transparent;color:var(--mu);transition:all .15s">🏢 Sociétés & Titres assignés</button>'
     +'</div>';
 
   // ═══ ONGLET DROITS ═══
@@ -2599,10 +2599,10 @@ function rAdmin(){
     enAttente.forEach(function(p){
       html+='<div style="background:var(--bg);border:1px solid rgba(255,122,61,.3);border-radius:9px;padding:15px;margin-bottom:10px">'
         +'<div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap">'
-        +'<div style="width:40px;height:40px;border-radius:50%;background:var(--or);display:flex;align-items:center;justify-content:center;font-family:\'Syne\',sans-serif;font-weight:800;color:#000;font-size:1rem">'+p.name.charAt(0).toUpperCase()+'</div>'
+        +'<div style="width:40px;height:40px;border-radius:50%;background:var(--or);display:flex;align-items:center;justify-content:center;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;font-weight:800;color:#000;font-size:1rem">'+p.name.charAt(0).toUpperCase()+'</div>'
         +'<div><div style="font-weight:700;font-size:.88rem">'+esc(p.name)+'</div><div style="font-size:.62rem;color:var(--mu)">'+new Date(p.createdAt).toLocaleDateString('fr-FR')+'</div></div>'
         +'<div style="margin-left:auto;display:flex;gap:7px;flex-wrap:wrap;align-items:center">'
-        +'<input type="text" id="att_poste_'+p.name+'" placeholder="Poste..." style="font-family:\'DM Mono\',monospace;font-size:.7rem;background:var(--sur);border:1px solid var(--bor);color:var(--tx);padding:5px 10px;border-radius:5px;width:160px">'
+        +'<input type="text" id="att_poste_'+p.name+'" placeholder="Poste..." style="font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;font-size:.7rem;background:var(--sur);border:1px solid var(--bor);color:var(--tx);padding:5px 10px;border-radius:5px;width:160px">'
         +'<button class="btn" style="background:var(--gr);color:#000;padding:5px 14px" onclick="approuverProfil(\''+p.name+'\')">✓ Approuver</button>'
         +'<button class="btn sec" style="color:var(--re);border-color:var(--re)" onclick="rejeterProfil(\''+p.name+'\')">✕ Rejeter</button>'
         +'</div></div>'
@@ -2637,10 +2637,10 @@ function rAdmin(){
     const statut=p.actif===false?'<span class="tag r">Désactivé</span>':'<span class="tag g">Actif</span>';
     html+='<div style="background:var(--bg);border:1px solid '+(isSelf?'var(--ac)':'var(--bor)')+';border-radius:10px;padding:15px;margin-bottom:13px">'
       +'<div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap">'
-      +'<div style="width:42px;height:42px;border-radius:50%;background:'+col+';display:flex;align-items:center;justify-content:center;font-family:\'Syne\',sans-serif;font-weight:800;font-size:1rem;color:#fff;flex-shrink:0">'+p.name.charAt(0).toUpperCase()+'</div>'
+      +'<div style="width:42px;height:42px;border-radius:50%;background:'+col+';display:flex;align-items:center;justify-content:center;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;font-weight:800;font-size:1rem;color:#fff;flex-shrink:0">'+p.name.charAt(0).toUpperCase()+'</div>'
       +'<div style="flex:1"><div style="font-weight:700;font-size:.88rem">'+esc(p.name)+(isSelf?' <span style="color:var(--ac);font-size:.62rem">(vous)</span>':'')+' '+statut+'</div>'
       +'<div style="display:flex;align-items:center;gap:5px;margin-top:4px">'
-      +'<input type="text" value="'+(esc(p.poste)||'')+'" placeholder="Poste..." id="poste_'+p.name+'" style="font-family:\'DM Mono\',monospace;font-size:.68rem;background:var(--sur);border:1px solid var(--bor);color:var(--tx);padding:3px 8px;border-radius:5px;width:170px">'
+      +'<input type="text" value="'+(esc(p.poste)||'')+'" placeholder="Poste..." id="poste_'+p.name+'" style="font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;font-size:.68rem;background:var(--sur);border:1px solid var(--bor);color:var(--tx);padding:3px 8px;border-radius:5px;width:170px">'
       +'<button class="btn sm sec" onclick="sauvegarderPoste(\''+p.name+'\')" title="Sauvegarder">💾</button>'
       +'</div></div>'
       +'<div style="display:flex;gap:6px;flex-wrap:wrap">'
@@ -2698,7 +2698,7 @@ function rAdmin(){
       /* [FIX P1-11] const isAd=false supprimé : jamais lu dans ce scope */
       html+='<div class="card" style="margin-bottom:14px">'
         +'<h3><span class="dot" style="background:var(--bl)"></span>'
-        +'<span style="width:32px;height:32px;border-radius:50%;background:var(--bl);display:inline-flex;align-items:center;justify-content:center;font-family:\'Syne\',sans-serif;font-weight:800;font-size:.85rem;color:#fff;margin-right:8px">'+p.name.charAt(0).toUpperCase()+'</span>'
+        +'<span style="width:32px;height:32px;border-radius:50%;background:var(--bl);display:inline-flex;align-items:center;justify-content:center;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;font-weight:800;font-size:.85rem;color:#fff;margin-right:8px">'+p.name.charAt(0).toUpperCase()+'</span>'
         +esc(p.name)+' <span style="font-size:.68rem;color:var(--mu);font-weight:400">'+(p.poste||'Agent')+'</span>'
         +(p.actif===false?' <span class="tag r" style="font-size:.58rem">Désactivé</span>':'')
         +'</h3>';
@@ -2755,7 +2755,7 @@ function rAdmin(){
     +'<button type="button" id="btn_security" class="btn sec" style="padding:4px 10px;font-size:.63rem;border-color:rgba(46,204,196,.4);color:var(--te)" onclick="verifierSecuriteSupabase()" title="Vérifier la connexion aux tables (ne teste pas les règles RLS)">🔒 Sécurité</button>'
     +'<button type="button" id="btn_restore" class="btn sec" style="padding:4px 10px;font-size:.63rem;border-color:rgba(169,122,255,.4);color:var(--pu)" onclick="restaurerSnapshot()" title="Restaurer depuis un snapshot automatique">⏪ Restaurer</button>'
     +'</div>'
-    +'<button onclick="resetComptes()" style="background:none;border:1px solid rgba(224,90,90,.3);color:var(--re);font-family:\'DM Mono\',monospace;font-size:.67rem;padding:8px 16px;border-radius:6px;cursor:pointer;font-weight:700;background:rgba(224,90,90,.12);border:1px solid rgba(224,90,90,.5)">'
+    +'<button onclick="resetComptes()" style="background:none;border:1px solid rgba(224,90,90,.3);color:var(--re);font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;font-size:.67rem;padding:8px 16px;border-radius:6px;cursor:pointer;font-weight:700;background:rgba(224,90,90,.12);border:1px solid rgba(224,90,90,.5)">'
     +'🗑 REMISE À ZÉRO TOTALE (données + comptes + cloud)</button></div>';
 
   el.innerHTML=html;
@@ -2946,7 +2946,7 @@ function checkAdminDel(){
   if(pageRight('admin')!=='write'){
     let toast=document.getElementById('_admin_toast');
     if(!toast){ toast=document.createElement('div'); toast.id='_admin_toast';
-      toast.style.cssText='position:fixed;top:68px;left:50%;transform:translateX(-50%);background:var(--re);color:#fff;padding:10px 22px;border-radius:8px;font-size:.75rem;z-index:9999;font-family:"DM Mono",monospace;pointer-events:none;transition:opacity .3s';
+      toast.style.cssText='position:fixed;top:68px;left:50%;transform:translateX(-50%);background:var(--re);color:#fff;padding:10px 22px;border-radius:8px;font-size:.75rem;z-index:9999;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;pointer-events:none;transition:opacity .3s';
       document.body.appendChild(toast);
     }
     toast.textContent='\uD83D\uDD12 Action r\u00e9serv\u00e9e \u00e0 l\'administrateur';
@@ -3041,7 +3041,7 @@ function rSocs(){
     var socHeader='<div style="display:flex;align-items:center;gap:12px;padding:12px 15px;'
       +'background:var(--sur2);border-radius:7px;margin-bottom:'+(tfs.length?'8px':'0')+'">'
       +'<div>'
-      +'<div style="font-family:Syne,sans-serif;font-weight:700;font-size:.95rem;color:var(--ac)">'+esc(s.nom)+'</div>'
+      +'<div style="font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;font-weight:700;font-size:.95rem;color:var(--ac)">'+esc(s.nom)+'</div>'
       +'<div style="font-size:.65rem;color:var(--mu);margin-top:2px">'
       +tfs.length+' titre'+(tfs.length>1?'s':'')+' forestier'+(tfs.length>1?'s':'')
       +' &nbsp;·&nbsp; Stock : '+mkStockMini(s.id,tfs)
@@ -3069,7 +3069,7 @@ function rSocs(){
           +'border-left:3px solid var(--bl);border-radius:7px;padding:12px">'
           +'<div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px">'
           +'<div>'
-          +'<div style="font-family:Syne,sans-serif;font-weight:700;color:var(--bl);font-size:.9rem">'+tf.nom+'</div>'
+          +'<div style="font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;font-weight:700;color:var(--bl);font-size:.9rem">'+tf.nom+'</div>'
           +(meta?'<div style="font-size:.63rem;color:var(--mu);margin-top:2px">'+meta+'</div>':'')
           +'</div>'
           +'<button class="btn sm sec" style="flex-shrink:0;margin-left:8px" onclick="delTitre(\''+tf.id+'\')">✕</button>'
@@ -3547,7 +3547,7 @@ function rSuiviLots(){
 
     const numsHTML=(lot.nums||[]).map(n=>{
       const used=utilises.has(n);
-      return `<span style="display:inline-block;padding:2px 7px;margin:2px;border-radius:4px;font-size:.65rem;font-family:'DM Mono',monospace;
+      return `<span style="display:inline-block;padding:2px 7px;margin:2px;border-radius:4px;font-size:.65rem;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;
         background:${used?'rgba(46,204,138,.15)':'rgba(74,143,255,.1)'};
         color:${used?'var(--gr)':'var(--bl)'};
         border:1px solid ${used?'rgba(46,204,138,.4)':'rgba(74,143,255,.3)'};
@@ -4275,7 +4275,7 @@ function rDash(){
   const kpiCard=(bc,label,value,sub,sc2='var(--mu)')=>
     `<div style="background:var(--sur);border:1px solid var(--bor);border-top:2px solid ${bc};border-radius:var(--r);padding:12px 13px">
       <div style="font-size:.58rem;color:var(--mu);text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px">${label}</div>
-      <div style="font-family:'Syne',sans-serif;font-size:1.25rem;font-weight:700;color:${bc}">${value}</div>
+      <div style="font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;font-size:1.25rem;font-weight:700;color:${bc}">${value}</div>
       <div style="font-size:.6rem;color:${sc2};margin-top:3px">${sub}</div>
     </div>`;
 
@@ -4285,7 +4285,7 @@ function rDash(){
       const a=qtyAch(tp),e=qtyEm(tp),sk=a-e,col=TI[tp].col;
       return `<div style="background:var(--sur);border:1px solid var(--bor);border-top:2px solid ${col};border-radius:var(--r);padding:12px 13px">
         <div style="font-size:.58rem;color:var(--mu);text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px">Stock <strong style="color:${col}">${tp}</strong>${fTF&&tfObj?' <span style="color:var(--mu);font-size:.55rem">'+tfObj.nom+'</span>':''}</div>
-        <div style="font-family:'Syne',sans-serif;font-size:1.25rem;font-weight:700;color:${col}">${sk.toLocaleString('fr-FR')}</div>
+        <div style="font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;font-size:1.25rem;font-weight:700;color:${col}">${sk.toLocaleString('fr-FR')}</div>
         <div style="font-size:.6rem;color:var(--mu);margin-top:3px">${a} achetés · <span style="color:var(--bl)">${e} émis</span></div>
       </div>`;
     }).join('');
@@ -4294,7 +4294,7 @@ function rDash(){
       const timEm=TI[tp].timbre?db.timbres.filter(t=>{const l=db.lots.find(x=>x.id===t.lotId);return l&&l.type===tp&&filtL(l);}).reduce((a,t)=>a+t.qte,0):null;
       return `<div style="background:var(--sur2);border:1px solid var(--bor);border-top:2px solid ${col};border-radius:var(--r);padding:12px 13px;opacity:.85">
         <div style="font-size:.58rem;color:var(--mu);text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px">Qté émise <strong style="color:${col}">${tp}</strong></div>
-        <div style="font-family:'Syne',sans-serif;font-size:1.25rem;font-weight:700;color:var(--bl)">${e.toLocaleString('fr-FR')}</div>
+        <div style="font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;font-size:1.25rem;font-weight:700;color:var(--bl)">${e.toLocaleString('fr-FR')}</div>
         <div style="font-size:.6rem;color:var(--mu);margin-top:3px">${TI[tp].timbre?'<span style="color:var(--pu)">'+timEm+' timbrés</span> · '+(e-timEm)+' non timbrés':'Pas de timbre'}</div>
       </div>`;
     }).join('');
@@ -4953,7 +4953,7 @@ function ouvrirUpload(id){
   const w=window.open('','_blank');
   if(w){
     if(u.type==='pdf') w.document.write('<html><body style="margin:0"><embed src="'+u.data+'" width="100%" height="100%" type="application/pdf"></body></html>');
-    else w.document.write('<html><body style="font-family:Arial;padding:20px"><h2>'+u.nom+'</h2><p>Cliquez Télécharger pour ouvrir ce fichier ZIP.</p></body></html>');
+    else w.document.write('<html><body style="font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;padding:20px"><h2>'+u.nom+'</h2><p>Cliquez Télécharger pour ouvrir ce fichier ZIP.</p></body></html>');
   }
 }
 
@@ -4997,7 +4997,7 @@ function ouvrirArchive(){
         ].map(([label,count,color])=>
           `<div style="background:var(--sur);border:1px solid var(--bor);border-top:2px solid ${color};border-radius:6px;padding:10px;text-align:center">
             <div style="font-size:.6rem;color:var(--mu);margin-bottom:4px">${label}</div>
-            <div style="font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:700;color:${color}">${count}</div>
+            <div style="font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;font-size:1.3rem;font-weight:700;color:${color}">${count}</div>
           </div>`
         ).join('')
       + '</div>'
@@ -5109,7 +5109,7 @@ function rArchives(){
     const solde = a.stats.totalEnc - a.stats.totalDec;
     return `<div style="background:var(--bg);border:1px solid var(--bor);border-left:4px solid var(--te);border-radius:8px;padding:16px;margin-bottom:12px">
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;flex-wrap:wrap">
-        <div style="font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;color:var(--te)">📦 ${a.annee}</div>
+        <div style="font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;font-size:1.4rem;font-weight:800;color:var(--te)">📦 ${a.annee}</div>
         <div style="flex:1">
           <div style="font-size:.72rem;color:var(--mu)">Archivé le ${d.toLocaleDateString('fr-FR')} à ${d.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})} par <strong>${a.archivedBy}</strong></div>
         </div>
@@ -5271,7 +5271,7 @@ function rechercherLV(){
   el.innerHTML=results.map(r=>`
     <div style="background:var(--sur2);border:1px solid var(--bor);border-radius:8px;padding:14px;margin-top:10px">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap">
-        <div style="font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800;color:var(--bl)">${esc(q)}</div>
+        <div style="font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;font-size:1.1rem;font-weight:800;color:var(--bl)">${esc(q)}</div>
         <span class="tag ${{LVG:'a',LVD:'b',DF10:'t'}[r.lot.type]||'a'}">${r.lot.type}</span>
         ${r.isUtil?'<span class="tag g">✓ Utilisé</span>':'<span class="tag o">Non utilisé</span>'}
         ${r.isTimbr?'<span class="tag p">◈ Timbré</span>':''}
@@ -5349,7 +5349,7 @@ function imprimerLots(){
     });
 }
 function _printTable(title,rows,headers,rowFn){
-  const style=`body{font-family:Arial,sans-serif;font-size:11px;color:#000;margin:20px;}
+  const style=`body{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;font-size:11px;color:#000;margin:20px;}
     h1{font-size:15px;margin-bottom:3px;color:#0B1E3E;}p{font-size:9px;color:#666;margin-bottom:12px;}
     table{width:100%;border-collapse:collapse;}
     th{background:#0B1E3E;color:#fff;padding:6px 7px;font-size:9px;text-align:left;}
@@ -5692,7 +5692,7 @@ function genererHTMLLot(lot){
   return `<!DOCTYPE html><html><head><meta charset="UTF-8">
   <title>Lot ${lot.ref}</title>
   <style>
-    body{font-family:Arial,sans-serif;margin:20px;color:#000;font-size:11px}
+    body{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;margin:20px;color:#000;font-size:11px}
     .header{background:#0B1E3E;color:#fff;padding:16px 20px;border-radius:6px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center}
     .logo{font-size:18px;font-weight:800;color:#C9962A}
     .info-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
