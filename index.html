@@ -6991,6 +6991,80 @@ window.testerS3 = async function(){
   }catch(e){ alert("Test echoue : " + (e && e.message ? e.message : e)); }
 };
 </script>
+<script>
+/* LVTRACK-GROUPES-V1 : stock a trois niveaux (titre > groupe > societe) */
+(function(){
+  function T(){ try{ return (db && db.titresF) || []; }catch(e){ return []; } }
+  function Q(){ try{ return (db && db.quits) || []; }catch(e){ return []; } }
+  function L(){ try{ return (db && db.lots) || []; }catch(e){ return []; } }
+  var N = function(v){ return Number(v)||0; };
+  function G(v){ return String(v||'').trim(); }
+
+  function titreDe(tfid){ var l=T(); for(var i=0;i<l.length;i++){ if(String(l[i].id)===String(tfid)) return l[i]; } return null; }
+  function groupeDuTitre(tfid){ var t=titreDe(tfid); return t ? G(t.groupe) : ''; }
+  function titresDuGroupe(sid, grp){
+    return T().filter(function(t){ return G(t.groupe)===G(grp) && (!sid || String(t.sid)===String(sid)); });
+  }
+
+  // Achats/emissions propres a un titre
+  function ach(tfid,tp){ return Q().filter(function(q){ return String(q.tfid)===String(tfid) && q.type===tp; }).reduce(function(s,q){ return s+N(q.qte); },0); }
+  function emi(tfid,tp){ return L().filter(function(l){ return String(l.tfid)===String(tfid) && l.type===tp; }).reduce(function(s,l){ return s+N(l.qte); },0); }
+
+  // Pool GROUPE : quittances avec un groupe et SANS titre precis
+  function achatsGroupe(sid, grp, tp){
+    return Q().filter(function(q){
+      return q.type===tp && G(q.groupe)===G(grp) && !q.tfid && (!sid || String(q.sid)===String(sid));
+    }).reduce(function(s,q){ return s+N(q.qte); },0);
+  }
+  // Ce que les titres du groupe ont emis au-dela de leur stock propre
+  function consoGroupe(sid, grp, tp){
+    return titresDuGroupe(sid, grp).reduce(function(s,t){
+      return s + Math.max(0, emi(t.id,tp) - ach(t.id,tp));
+    },0);
+  }
+
+  // Pool SOCIETE : quittances sans titre ET sans groupe
+  function achatsSociete(sid, tp){
+    return Q().filter(function(q){
+      return q.type===tp && String(q.sid)===String(sid) && !q.tfid && !G(q.groupe);
+    }).reduce(function(s,q){ return s+N(q.qte); },0);
+  }
+  // Emissions non couvertes par le stock propre ni par le pool du groupe
+  function consoSociete(sid, tp){
+    var parGroupe = {};
+    T().filter(function(t){ return String(t.sid)===String(sid); }).forEach(function(t){
+      var g = G(t.groupe) || '__sans__';
+      parGroupe[g] = (parGroupe[g]||0) + Math.max(0, emi(t.id,tp) - ach(t.id,tp));
+    });
+    var total = 0;
+    Object.keys(parGroupe).forEach(function(g){
+      var dispo = (g==='__sans__') ? 0 : achatsGroupe(sid, g, tp);
+      total += Math.max(0, parGroupe[g] - dispo);
+    });
+    return total;
+  }
+
+  window.stkDispoTF = function(sid, tfid, tp){
+    if(!tfid){
+      var gl = Math.max(0, achatsSociete(sid,tp) - consoSociete(sid,tp));
+      return { propre:0, emprunte:gl, empruntGroupe:0, empruntSociete:gl, total:gl };
+    }
+    var propre = Math.max(0, ach(tfid,tp) - emi(tfid,tp));
+    var grp = groupeDuTitre(tfid);
+    var dispoGroupe = grp ? Math.max(0, achatsGroupe(sid, grp, tp) - consoGroupe(sid, grp, tp)) : 0;
+    var dispoSoc = Math.max(0, achatsSociete(sid,tp) - consoSociete(sid,tp));
+    return {
+      propre: propre,
+      empruntGroupe: dispoGroupe,
+      empruntSociete: dispoSoc,
+      emprunte: dispoGroupe + dispoSoc,
+      total: propre + dispoGroupe + dispoSoc
+    };
+  };
+
+  window.stockDetailTF = window.stkDispoTF;
+})();
+</script>
 </body>
 </html>
 
